@@ -1,0 +1,10 @@
+export {default as Footer} from './Footer/Footer'
+export {default as Cta} from './Cta/Cta'
+export {default as Benefits} from './Benefits/Benefits'
+export {default as Stats} from './Stats/Stats'
+export {default as Testimonials} from './Testimonials/Testimonials'
+export {default as Header} from './Header/Header'
+export {default as Hero} from './Hero/Hero'
+export {default as Features} from './Features/Features'
+export {default as Product} from './Product/Product'
+
