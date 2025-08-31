@@ -22,15 +22,30 @@ function Header({ colors }) {
               <div className="text-2xl font-bold" style={{color: colors.primary}}>
                 <img src={LOGO} alt="Logo" className="w-50 h-15" />
               </div>
-              
-              <div className="hidden md:flex space-x-8">
-                <a href="#home" className="hover:opacity-80 transition-opacity" style={{color: colors.primary}}>Home</a>
-                <a href="#features" className="hover:opacity-80 transition-opacity" style={{color: colors.primary}}>Features</a>
-                <a href="#products" className="hover:opacity-80 transition-opacity" style={{color: colors.primary}}>Products</a>
-                <a href="#testimonials" className="hover:opacity-80 transition-opacity" style={{color: colors.primary}}>Reviews</a>
-                <a href="#contact" className="hover:opacity-80 transition-opacity" style={{color: colors.primary}}>Contact</a>
-              </div>
-  
+                            
+            <div className="hidden md:flex space-x-10">
+              <a href="#home" className="relative font-semibold text-lg tracking-wide hover:opacity-80 hover:scale-105 transition-all duration-300 group" style={{color: colors.primary}}>
+                Home
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-current transition-all duration-300 group-hover:w-full"></span>
+              </a>
+              <a href="#features" className="relative font-semibold text-lg tracking-wide hover:opacity-80 hover:scale-105 transition-all duration-300 group" style={{color: colors.primary}}>
+                Features
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-current transition-all duration-300 group-hover:w-full"></span>
+              </a>
+              <a href="#products" className="relative font-semibold text-lg tracking-wide hover:opacity-80 hover:scale-105 transition-all duration-300 group" style={{color: colors.primary}}>
+                Products
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-current transition-all duration-300 group-hover:w-full"></span>
+              </a>
+              <a href="#testimonials" className="relative font-semibold text-lg tracking-wide hover:opacity-80 hover:scale-105 transition-all duration-300 group" style={{color: colors.primary}}>
+                Reviews
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-current transition-all duration-300 group-hover:w-full"></span>
+              </a>
+              <a href="#contact" className="relative font-semibold text-lg tracking-wide hover:opacity-80 hover:scale-105 transition-all duration-300 group" style={{color: colors.primary}}>
+                Contact
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-current transition-all duration-300 group-hover:w-full"></span>
+              </a>
+          </div>
+
               <button 
                 className="md:hidden"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}

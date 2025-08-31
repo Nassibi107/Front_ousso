@@ -1,7 +1,7 @@
 import  { useState, useEffect } from 'react';
 import { ChevronDown, Star, Shield, Leaf, Clock, 
   Users, ArrowRight, Check, Menu, X } from 'lucide-react';
-import { Footer , Header , Hero , Product , Stats , Testimonials , Cta, Benefits, Features  } from './compenents';
+import { Footer , Header , Hero , Product , Stats , Testimonials , Cta, Benefits, Features , Gallery } from './compenents';
 
 
 
@@ -25,6 +25,8 @@ const App = () => {
 
       {/* Features Section */}
       <Features colors={colors} />
+      {/* Gallery Section */}
+      <Gallery colors={colors} />
 
       {/* Product Showcase */}
       <Product colors={colors} />
