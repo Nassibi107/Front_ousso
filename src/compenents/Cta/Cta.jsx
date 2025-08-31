@@ -11,33 +11,25 @@ function Cta({ colors }
         <div className="container mx-auto px-6 text-center">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-4xl font-bold mb-6" style={{color: colors.primary}}>
-              Ready to Experience Ultimate Freshness?
+             Prêt à découvrir la fraîcheur ultime
             </h2>
             <p className="text-xl mb-8" style={{color: colors.secondary}}>
-              Join thousands of satisfied customers who trust FreshGuard for their daily protection.
+              Rejoignez des milliers de clients satisfaits qui font confiance à FreshGuard pour leur protection quotidienne
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
               <button className="px-8 py-4 rounded-full font-semibold text-white transition-transform hover:scale-105 flex items-center justify-center" style={{backgroundColor: colors.success}}>
-                Order Now <ArrowRight size={20} className="ml-2" />
-              </button>
-              <button className="px-8 py-4 rounded-full font-semibold border-2 transition-colors" style={{borderColor: colors.primary, color: colors.primary}}>
-                Free Sample
+              Commandez maintenant<ArrowRight size={20} className="ml-2" />
               </button>
             </div>
-            
             <div className="flex justify-center items-center space-x-8 text-sm" style={{color: colors.secondary}}>
               <div className="flex items-center">
                 <Check size={16} className="mr-2" style={{color: colors.success}} />
-                Free Shipping
+                Retours sous 3 jours
               </div>
               <div className="flex items-center">
                 <Check size={16} className="mr-2" style={{color: colors.success}} />
-                30-Day Returns
-              </div>
-              <div className="flex items-center">
-                <Check size={16} className="mr-2" style={{color: colors.success}} />
-                Money Back Guarantee
+                Garantie de remboursement
               </div>
             </div>
           </div>
