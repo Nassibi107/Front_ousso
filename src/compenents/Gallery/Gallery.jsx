@@ -5,6 +5,7 @@ import './Gallery.css';
 import Flag from '../../assets/fff.jpg';
 import Flag1 from '../../assets/ffff.jpg';
 import women from '../../assets/womenLive.jpg';
+import ere from '../../assets/ere.jpg';
 function Gallery({colors}) {
   return (
      <div className="gallery" id="gallery">
@@ -12,7 +13,7 @@ function Gallery({colors}) {
               <div className="container">
                 <div className="box">
                   <div className="image">
-                    <img src={Flag1} alt="" />
+                    <img src={ere} alt="" />
                   </div>
                 </div>
                 <div className="box">

@@ -1,7 +1,7 @@
 import  { useState, useEffect } from 'react';
 import { ChevronDown, Star, Shield, Leaf, Clock, 
   Users, ArrowRight, Check, Menu, X } from 'lucide-react';
-import { Footer , Header , Hero , Product , Stats , Testimonials , Cta, Benefits, Features , Gallery } from './compenents';
+import { Footer , Header , Hero , Product , Stats , Testimonials , Cta, Benefits, Features , Gallery , FAQ} from './compenents';
 
 
 
@@ -40,11 +40,10 @@ const App = () => {
 
       {/* Benefits Section */}
       <Benefits colors={colors} />
-    
-
+      {/* FAQ Section */}
+      {<FAQ colors={colors} />}
       {/* CTA Section */}
       <Cta colors={colors} />
-
       {/* Footer */}
       <Footer colors={colors} />
     </div>

@@ -44,6 +44,10 @@ function Header({ colors }) {
                 Contact
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-current transition-all duration-300 group-hover:w-full"></span>
               </a>
+              <a href="#faq" className="relative font-semibold text-lg tracking-wide hover:opacity-80 hover:scale-105 transition-all duration-300 group" style={{color: colors.primary}}>
+                FAQ
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-current transition-all duration-300 group-hover:w-full"></span>
+              </a>
           </div>
 
               <button 
