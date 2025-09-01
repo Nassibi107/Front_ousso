@@ -84,10 +84,10 @@ const ContactForm = () => {
             </svg>
           </div>
           <h3 className="text-2xl font-bold mb-2" style={{ color: colors.primary }}>
-            Message Sent Successfully!
+            Message envoyé <b>avec succès</b> !
           </h3>
           <p style={{ color: colors.secondary }}>
-            Thank you for reaching out. We'll get back to you soon.
+            Merci de nous avoir contacté. Nous vous répondrons bientôt.
           </p>
         </div>
       </div>
@@ -167,10 +167,10 @@ const ContactForm = () => {
             className="text-3xl font-bold mb-2"
             style={{ color: colors.primary }}
           >
-            Get In Touch
+            Entrer en contact
           </h2>
           <p style={{ color: colors.secondary }}>
-            We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+            Nous aimerions avoir de vos nouvelles. Envoyez-nous un message et nous vous répondrons dès que possible.
           </p>
         </div>
 
@@ -182,7 +182,7 @@ const ContactForm = () => {
                 className="block text-sm font-medium mb-2"
                 style={{ color: colors.primary }}
               >
-                Full Name *
+                Nom Complet *
               </label>
               <input
                 type="text"
@@ -198,7 +198,7 @@ const ContactForm = () => {
                 }}
                 onFocus={(e) => e.target.style.borderColor = colors.accent}
                 onBlur={(e) => e.target.style.borderColor = 'rgb(229, 231, 235)'}
-                placeholder="Enter your full name"
+                placeholder="Entrez votre nom complet"
               />
             </div>
             
@@ -208,7 +208,7 @@ const ContactForm = () => {
                 className="block text-sm font-medium mb-2"
                 style={{ color: colors.primary }}
               >
-                Email Address *
+                Adresse e-mail *
               </label>
               <input
                 type="email"
@@ -220,7 +220,7 @@ const ContactForm = () => {
                 className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:outline-none transition-colors"
                 onFocus={(e) => e.target.style.borderColor = colors.accent}
                 onBlur={(e) => e.target.style.borderColor = 'rgb(229, 231, 235)'}
-                placeholder="Enter your email address"
+                placeholder="Entrez votre adresse e-mail"
               />
             </div>
           </div>
@@ -231,7 +231,7 @@ const ContactForm = () => {
               className="block text-sm font-medium mb-2"
               style={{ color: colors.primary }}
             >
-              Subject *
+              Sujet *
             </label>
             <input
               type="text"
@@ -243,7 +243,7 @@ const ContactForm = () => {
               className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:outline-none transition-colors"
               onFocus={(e) => e.target.style.borderColor = colors.accent}
               onBlur={(e) => e.target.style.borderColor = 'rgb(229, 231, 235)'}
-              placeholder="What's this about?"
+              placeholder="De quoi s'agit-il?"
             />
           </div>
 
@@ -265,7 +265,7 @@ const ContactForm = () => {
               className="w-full px-4 py-3 rounded-lg border-2 border-gray-200 focus:outline-none transition-colors resize-none"
               onFocus={(e) => e.target.style.borderColor = colors.accent}
               onBlur={(e) => e.target.style.borderColor = 'rgb(229, 231, 235)'}
-              placeholder="Tell us more about your inquiry..."
+              placeholder="Dites-nous en plus sur votre demande..."
             />
           </div>
 
@@ -297,7 +297,7 @@ const ContactForm = () => {
                 <span>Sending Message...</span>
               </div>
             ) : (
-              'Send Message'
+              'Envoyer le message'
             )}
           </button>
         </div>

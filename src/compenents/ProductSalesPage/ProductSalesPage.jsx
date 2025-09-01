@@ -1,73 +1,63 @@
-import React, { createContext, useContext, useReducer, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
+import { ShoppingCart, Plus, Minus, X, Package, Star, Check } from 'lucide-react';
 
-// Cart Context
+const colors = {
+  primary: '#025984',
+  secondary: '#0a8899',
+  accent: '#0fb5a0',
+  light: '#e7d8c4',
+  success: '#01af4c'
+};
+
+import women from '../../assets/women.png'
+import man from '../../assets/man.png'
+import manWomen from '../../assets/w+m.jpg'
 const CartContext = createContext();
 
-// Cart Reducer
-const cartReducer = (state, action) => {
-  switch (action.type) {
-    case 'ADD_TO_CART':
-      const existingItem = state.find(item => 
-        item.id === action.payload.id && 
-        item.size === action.payload.size && 
-        item.color === action.payload.color
-      );
-      
+export const CartProvider = ({ children }) => {
+  const [cartItems, setCartItems] = useState([]);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+
+  const addToCart = (product) => {
+    setCartItems(prev => {
+      const existingItem = prev.find(item => item.id === product.id);
       if (existingItem) {
-        return state.map(item =>
-          item.id === action.payload.id && 
-          item.size === action.payload.size && 
-          item.color === action.payload.color
-            ? { ...item, quantity: item.quantity + action.payload.quantity }
+        return prev.map(item =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       }
-      return [...state, action.payload];
-    
-    case 'REMOVE_FROM_CART':
-      return state.filter((item, index) => index !== action.payload);
-    
-    case 'UPDATE_QUANTITY':
-      return state.map((item, index) =>
-        index === action.payload.index
-          ? { ...item, quantity: Math.max(0, action.payload.quantity) }
-          : item
-      ).filter(item => item.quantity > 0);
-    
-    case 'CLEAR_CART':
-      return [];
-    
-    default:
-      return state;
-  }
-};
-
-// Cart Provider Component
-export const CartProvider = ({ children }) => {
-  const [cartItems, dispatch] = useReducer(cartReducer, []);
-
-  const addToCart = (product) => {
-    dispatch({ type: 'ADD_TO_CART', payload: product });
+      return [...prev, { ...product, quantity: 1 }];
+    });
   };
 
-  const removeFromCart = (index) => {
-    dispatch({ type: 'REMOVE_FROM_CART', payload: index });
+  const removeFromCart = (productId) => {
+    setCartItems(prev => prev.filter(item => item.id !== productId));
   };
 
-  const updateQuantity = (index, quantity) => {
-    dispatch({ type: 'UPDATE_QUANTITY', payload: { index, quantity } });
+  const updateQuantity = (productId, quantity) => {
+    if (quantity <= 0) {
+      removeFromCart(productId);
+      return;
+    }
+    setCartItems(prev =>
+      prev.map(item =>
+        item.id === productId ? { ...item, quantity } : item
+      )
+    );
   };
 
-  const clearCart = () => {
-    dispatch({ type: 'CLEAR_CART' });
+  const getTotalItems = () => {
+    return cartItems.reduce((total, item) => total + item.quantity, 0);
   };
 
-  const getCartTotal = () => {
+  const getTotalPrice = () => {
     return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
   };
 
-  const getCartCount = () => {
-    return cartItems.reduce((total, item) => total + item.quantity, 0);
+  const clearCart = () => {
+    setCartItems([]);
   };
 
   return (
@@ -76,16 +66,17 @@ export const CartProvider = ({ children }) => {
       addToCart,
       removeFromCart,
       updateQuantity,
+      getTotalItems,
+      getTotalPrice,
       clearCart,
-      getCartTotal,
-      getCartCount
+      isCheckoutOpen,
+      setIsCheckoutOpen
     }}>
       {children}
     </CartContext.Provider>
   );
 };
 
-// Custom hook to use cart
 export const useCart = () => {
   const context = useContext(CartContext);
   if (!context) {
@@ -94,648 +85,519 @@ export const useCart = () => {
   return context;
 };
 
-// Updated ProductSalesPage with Cart Integration
-const ProductSalesPage = ({ colors }) => {
-  const [selectedImage, setSelectedImage] = useState(0);
-  const [quantity, setQuantity] = useState(1);
-  const [selectedSize, setSelectedSize] = useState('M');
-  const [selectedColor, setSelectedColor] = useState('blue');
-  const [showReviews, setShowReviews] = useState(false);
-  const [isGoogleSignedIn, setIsGoogleSignedIn] = useState(false);
-  const [userProfile, setUserProfile] = useState(null);
-  const [showCartModal, setShowCartModal] = useState(false);
-  const [newReview, setNewReview] = useState({
-    rating: 5,
-    title: '',
-    comment: '',
-    images: []
-  });
-
-  // Use cart context
-  const { addToCart, cartItems, getCartCount, getCartTotal, removeFromCart, updateQuantity } = useCart();
-
-  const defaultColors = {
-    primary: '#025984',
-    secondary: '#0a8899',
-    accent: '#0fb5a0',
-    light: '#e7d8c4',
-    success: '#01af4c'
-  };
-
-  const themeColors = colors || defaultColors;
-
-  const product = {
+// Sample Deodorant Products Data
+const sampleProducts = [
+  {
     id: 1,
-    name: "Premium Collection Sneakers",
-    price: 129.99,
-    originalPrice: 159.99,
-    rating: 4.8,
-    reviewCount: 234,
-    description: "Experience ultimate comfort and style with our Premium Collection Sneakers. Crafted with premium materials and innovative design, these shoes are perfect for both casual wear and athletic activities.",
-    features: [
-      "Premium leather and mesh construction",
-      "Advanced cushioning technology",
-      "Breathable and moisture-wicking interior",
-      "Durable rubber outsole with superior grip",
-      "Available in multiple colors and sizes"
-    ],
+    name: "Fresh Ocean Breeze",
+    price: 15.99,
+    description: "Déodorant anti-transpirant longue durée avec parfum frais océanique. Protection 48h garantie, sans alcool, enrichi en aloe vera pour apaiser la peau.",
     images: [
-      "https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-      "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+      women,
+      "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=400",
+      "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400",
+      "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=400"
     ],
-    sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
-    colors: [
-      { name: 'blue', hex: '#3B82F6', label: 'Ocean Blue' },
-      { name: 'red', hex: '#EF4444', label: 'Crimson Red' },
-      { name: 'black', hex: '#1F2937', label: 'Midnight Black' },
-      { name: 'white', hex: '#F9FAFB', label: 'Pure White' }
-    ]
-  };
+    icon: "🌊",
+    rating: 4.8,
+    features: ["Protection 48h", "Sans Alcool", "Aloe Vera", "Parfum Océan"]
+  },
+  {
+    id: 2,
+    name: "Active Sport Pro",
+    price: 18.50,
+    description: "Déodorant spécialement conçu pour les sportifs. Résiste à l'effort intense, sèche rapidement et offre une fraîcheur durable même pendant l'exercice.",
+    images: [
+      manWomen,
+      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400",
+      "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=400",
+      "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400"
+    ],
+    icon: "💪",
+    rating: 4.9,
+    features: ["Anti-Transpirant", "Séchage Rapide", "Sport Intense", "72h Protection"]
+  },
+  {
+    id: 3,
+    name: "Sensitive Care Natural",
+    price: 16.75,
+    description: "Déodorant naturel pour peaux sensibles, formulé sans parabènes ni aluminium. Ingrédients biologiques, hypoallergénique et testé dermatologiquement.",
+    images: [
+     man,
+      "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=400",
+      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400",
+      "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=400"
+    ],
+    icon: "🌿",
+    rating: 4.7,
+    features: ["100% Naturel", "Sans Aluminium", "Hypoallergénique", "Bio Certifié"]
+  },
+];
 
-  const reviews = [
-    {
-      id: 1,
-      user: {
-        name: "Sarah Johnson",
-        avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b2bb?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
-        verified: true
-      },
-      rating: 5,
-      title: "Amazing quality and comfort!",
-      comment: "These sneakers exceeded my expectations. The comfort level is incredible and they look great with any outfit. Highly recommended!",
-      date: "2025-01-15",
-      images: ["https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"],
-      helpful: 23
-    },
-    {
-      id: 2,
-      user: {
-        name: "Mike Chen",
-        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
-        verified: true
-      },
-      rating: 4,
-      title: "Great for daily wear",
-      comment: "Perfect for my daily walks and gym sessions. The grip is excellent and they're very durable. Only minor issue is they run slightly small.",
-      date: "2025-01-10",
-      images: [],
-      helpful: 15
-    }
-  ];
+// Product Detail Modal
+const ProductDetailModal = ({ product, isOpen, onClose }) => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { addToCart } = useCart();
 
-  // Handle Add to Cart
+  if (!isOpen || !product) return null;
+
   const handleAddToCart = () => {
-    const selectedColorObj = product.colors.find(c => c.name === selectedColor);
-    const cartItem = {
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.images[0],
-      size: selectedSize,
-      color: selectedColor,
-      colorLabel: selectedColorObj?.label || selectedColor,
-      quantity: quantity
-    };
-    
-    addToCart(cartItem);
-    
-    // Show success message or modal
-    alert(`Added ${quantity} item(s) to cart!`);
-  };
-
-  // Simulate Google Sign-In
-  const handleGoogleSignIn = () => {
-    setIsGoogleSignedIn(true);
-    setUserProfile({
-      name: "John Doe",
-      email: "john.doe@gmail.com",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
-    });
-  };
-
-  const handleSubmitReview = () => {
-    if (!isGoogleSignedIn) {
-      alert("Please sign in with Google to submit a review");
-      return;
-    }
-    
-    if (!newReview.title || !newReview.comment) {
-      alert("Please fill in all required fields");
-      return;
-    }
-
-    alert("Review submitted successfully! Thank you for your feedback.");
-    
-    setNewReview({
-      rating: 5,
-      title: '',
-      comment: '',
-      images: []
-    });
-  };
-
-  const renderStars = (rating, interactive = false, onRate = null) => {
-    return [...Array(5)].map((_, index) => (
-      <svg
-        key={index}
-        className={`w-5 h-5 ${interactive ? 'cursor-pointer' : ''} ${
-          index < rating ? 'text-yellow-400' : 'text-gray-300'
-        }`}
-        fill="currentColor"
-        viewBox="0 0 20 20"
-        onClick={() => interactive && onRate && onRate(index + 1)}
-      >
-        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-      </svg>
-    ));
-  };
-
-  // Cart Modal Component
-  const CartModal = () => {
-    if (!showCartModal) return null;
-
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 max-h-96 overflow-y-auto">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-bold" style={{ color: themeColors.primary }}>
-              Shopping Cart ({getCartCount()})
-            </h3>
-            <button 
-              onClick={() => setShowCartModal(false)}
-              className="text-gray-500 hover:text-gray-700"
-            >
-              ✕
-            </button>
-          </div>
-          
-          {cartItems.length === 0 ? (
-            <p className="text-center py-4 text-gray-500">Your cart is empty</p>
-          ) : (
-            <>
-              <div className="space-y-3 mb-4">
-                {cartItems.map((item, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <img src={item.image} alt={item.name} className="w-12 h-12 object-cover rounded" />
-                      <div>
-                        <h4 className="font-medium text-sm">{item.name}</h4>
-                        <p className="text-xs text-gray-500">
-                          Size: {item.size}, Color: {item.colorLabel}
-                        </p>
-                        <p className="font-bold" style={{ color: themeColors.accent }}>
-                          DH{item.price}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <button
-                        onClick={() => updateQuantity(index, item.quantity - 1)}
-                        className="w-6 h-6 rounded text-white text-sm"
-                        style={{ backgroundColor: themeColors.secondary }}
-                      >
-                        -
-                      </button>
-                      <span className="text-sm font-medium">{item.quantity}</span>
-                      <button
-                        onClick={() => updateQuantity(index, item.quantity + 1)}
-                        className="w-6 h-6 rounded text-white text-sm"
-                        style={{ backgroundColor: themeColors.accent }}
-                      >
-                        +
-                      </button>
-                      <button
-                        onClick={() => removeFromCart(index)}
-                        className="w-6 h-6 rounded bg-red-500 text-white text-sm ml-2"
-                      >
-                        ×
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="border-t pt-4">
-                <div className="flex justify-between items-center mb-4">
-                  <span className="font-bold text-lg" style={{ color: themeColors.primary }}>
-                    Total: DH{getCartTotal().toFixed(2)}
-                  </span>
-                </div>
-                <button
-                  className="w-full py-2 text-white font-semibold rounded-lg"
-                  style={{ backgroundColor: themeColors.success }}
-                >
-                  Checkout
-                </button>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-    );
+    addToCart(product);
+    onClose();
   };
 
   return (
-    <div 
-      className="min-h-screen relative"
-      style={{
-        background: `linear-gradient(135deg, ${themeColors.primary} 0%, ${themeColors.secondary} 35%, ${themeColors.accent} 100%)`
-      }}
-    >
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute inset-0" style={{
-          backgroundImage: 'radial-gradient(circle at 25px 25px, rgba(255,255,255,0.2) 2px, transparent 2px), radial-gradient(circle at 75px 75px, rgba(255,255,255,0.1) 2px, transparent 2px)',
-          backgroundSize: '50px 50px'
-        }} />
-      </div>
-
-      {/* Cart Icon */}
-      <div className="fixed top-4 right-4 z-40">
-        <button
-          onClick={() => setShowCartModal(true)}
-          className="relative p-3 rounded-full text-white shadow-lg"
-          style={{ backgroundColor: themeColors.accent }}
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5-6M7 13h10m0 0v6a1 1 0 01-1 1H8a1 1 0 01-1-1v-6m10 0V9a1 1 0 00-1-1H8a1 1 0 00-1-1V7" />
-          </svg>
-          {getCartCount() > 0 && (
-            <span 
-              className="absolute -top-2 -right-2 text-xs px-2 py-1 rounded-full text-white font-bold"
-              style={{ backgroundColor: themeColors.primary }}
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold" style={{ color: colors.primary }}>
+              {product.icon} {product.name}
+            </h2>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
             >
-              {getCartCount()}
-            </span>
-          )}
-        </button>
-      </div>
+              <X size={24} />
+            </button>
+          </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8 relative z-10">
-        {/* Product Section */}
-        <div 
-          className="bg-white rounded-2xl shadow-2xl p-8 mb-8 backdrop-blur-sm"
-          style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}
-        >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Product Images */}
+          <div className="grid md:grid-cols-2 gap-6">
             <div>
               <div className="mb-4">
                 <img
-                  src={product.images[selectedImage]}
+                  src={product.images[currentImageIndex]}
                   alt={product.name}
-                  className="w-full h-96 object-cover rounded-xl shadow-lg"
+                  className="w-full h-80 object-cover rounded-lg"
                 />
               </div>
-              <div className="flex space-x-2 overflow-x-auto">
+              <div className="grid grid-cols-4 gap-2">
                 {product.images.map((image, index) => (
                   <button
                     key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                      selectedImage === index ? 'border-2' : 'border-gray-200'
+                    onClick={() => setCurrentImageIndex(index)}
+                    className={`border-2 rounded-lg overflow-hidden transition-all ${
+                      index === currentImageIndex
+                        ? 'border-2'
+                        : 'border-gray-200 hover:border-gray-400'
                     }`}
-                    style={{ borderColor: selectedImage === index ? themeColors.accent : undefined }}
+                    style={{
+                      borderColor: index === currentImageIndex ? colors.accent : undefined
+                    }}
                   >
                     <img
                       src={image}
                       alt={`${product.name} ${index + 1}`}
-                      className="w-full h-full object-cover"
+                      className="w-full h-20 object-cover"
                     />
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Product Details */}
             <div>
-              <h1 className="text-3xl font-bold mb-4" style={{ color: themeColors.primary }}>
-                {product.name}
-              </h1>
-              
               <div className="flex items-center mb-4">
-                <div className="flex items-center">
-                  {renderStars(Math.floor(product.rating))}
-                  <span className="ml-2 text-gray-600">
-                    {product.rating} ({product.reviewCount} reviews)
-                  </span>
+                <div className="flex text-yellow-400 mr-2">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      size={20}
+                      fill={i < Math.floor(product.rating) ? "currentColor" : "none"}
+                    />
+                  ))}
                 </div>
-              </div>
-
-              <div className="flex items-center mb-6">
-                <span className="text-3xl font-bold" style={{ color: themeColors.accent }}>
-                  DH{product.price}
-                </span>
-                <span className="text-xl text-gray-500 line-through ml-3">
-                  DH{product.originalPrice}
-                </span>
-                <span 
-                  className="ml-3 px-3 py-1 rounded-full text-white text-sm font-semibold"
-                  style={{ backgroundColor: themeColors.success }}
-                >
-                  Save DH{(product.originalPrice - product.price).toFixed(2)}
-                </span>
+                <span className="text-gray-600">({product.rating})</span>
               </div>
 
               <p className="text-gray-700 mb-6 leading-relaxed">
                 {product.description}
               </p>
 
-              {/* Color Selection */}
               <div className="mb-6">
-                <h3 className="font-semibold mb-3" style={{ color: themeColors.primary }}>
-                  Color: {product.colors.find(c => c.name === selectedColor)?.label}
+                <h3 className="font-semibold mb-3" style={{ color: colors.primary }}>
+                  Key Features:
                 </h3>
-                <div className="flex space-x-2">
-                  {product.colors.map((color) => (
-                    <button
-                      key={color.name}
-                      onClick={() => setSelectedColor(color.name)}
-                      className={`w-10 h-10 rounded-full border-2 transition-all ${
-                        selectedColor === color.name ? 'border-4' : 'border-gray-300'
-                      }`}
-                      style={{ 
-                        backgroundColor: color.hex,
-                        borderColor: selectedColor === color.name ? themeColors.accent : undefined
-                      }}
-                      title={color.label}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Size Selection */}
-              <div className="mb-6">
-                <h3 className="font-semibold mb-3" style={{ color: themeColors.primary }}>
-                  Size: {selectedSize}
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {product.sizes.map((size) => (
-                    <button
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
-                      className={`px-4 py-2 border border-gray-300 rounded-lg transition-all ${
-                        selectedSize === size ? 'text-white' : 'text-gray-700 hover:border-gray-400'
-                      }`}
-                      style={{ 
-                        backgroundColor: selectedSize === size ? themeColors.accent : 'transparent',
-                        borderColor: selectedSize === size ? themeColors.accent : undefined
-                      }}
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Quantity */}
-              <div className="mb-6">
-                <h3 className="font-semibold mb-3" style={{ color: themeColors.primary }}>
-                  Quantity
-                </h3>
-                <div className="flex items-center space-x-3">
-                  <button
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-gray-50"
-                  >
-                    -
-                  </button>
-                  <span className="text-xl font-semibold px-4">{quantity}</span>
-                  <button
-                    onClick={() => setQuantity(quantity + 1)}
-                    className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center hover:bg-gray-50"
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              {/* Add to Cart Button */}
-              <button
-                onClick={handleAddToCart}
-                className="w-full py-4 text-white font-semibold text-lg rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105 mb-4"
-                style={{ backgroundColor: themeColors.accent }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = themeColors.secondary}
-                onMouseLeave={(e) => e.target.style.backgroundColor = themeColors.accent}
-              >
-                Add to Cart - DH{(product.price * quantity).toFixed(2)}
-              </button>
-
-              {/* Features */}
-              <div>
-                <h3 className="font-semibold mb-3" style={{ color: themeColors.primary }}>
-                  Key Features
-                </h3>
-                <ul className="space-y-2">
+                <div className="grid grid-cols-2 gap-2">
                   {product.features.map((feature, index) => (
-                    <li key={index} className="flex items-center text-gray-700">
-                      <svg className="w-4 h-4 mr-2" style={{ color: themeColors.success }} fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                      {feature}
-                    </li>
+                    <div key={index} className="flex items-center">
+                      <Check size={16} style={{ color: colors.success }} className="mr-2" />
+                      <span className="text-sm text-gray-700">{feature}</span>
+                    </div>
                   ))}
-                </ul>
+                </div>
+              </div>
+
+              <div className="border-t pt-6">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-3xl font-bold" style={{ color: colors.primary }}>
+                    ${product.price}
+                  </span>
+                  <span className="text-sm text-gray-500">Free shipping included</span>
+                </div>
+
+                <button
+                  onClick={handleAddToCart}
+                  className="w-full py-3 px-6 rounded-lg text-white font-semibold hover:opacity-90 transition-opacity"
+                  style={{ backgroundColor: colors.accent }}
+                >
+                  Add to Cart
+                </button>
               </div>
             </div>
           </div>
         </div>
-
-        {/* Reviews Section */}
-        <div 
-          className="bg-white rounded-2xl shadow-2xl p-8 backdrop-blur-sm"
-          style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}
-        >
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold" style={{ color: themeColors.primary }}>
-              Customer Reviews ({product.reviewCount})
-            </h2>
-            <button
-              onClick={() => setShowReviews(!showReviews)}
-              className="px-6 py-2 rounded-lg font-semibold transition-all"
-              style={{ 
-                backgroundColor: showReviews ? themeColors.light : themeColors.accent,
-                color: showReviews ? themeColors.primary : 'white'
-              }}
-            >
-              {showReviews ? 'Hide Reviews' : 'Show Reviews'}
-            </button>
-          </div>
-
-          {showReviews && (
-            <>
-              {/* Write Review Section */}
-              <div className="border-b pb-8 mb-8">
-                <h3 className="text-xl font-semibold mb-4" style={{ color: themeColors.primary }}>
-                  Write a Review
-                </h3>
-                
-                {!isGoogleSignedIn ? (
-                  <div className="text-center p-8 bg-gray-50 rounded-lg">
-                    <p className="text-gray-600 mb-4">Sign in with Google to write a review</p>
-                    <button
-                      onClick={handleGoogleSignIn}
-                      className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold flex items-center mx-auto space-x-2 hover:bg-blue-700 transition-colors"
-                    >
-                      <svg className="w-5 h-5" viewBox="0 0 24 24">
-                        <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                        <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                        <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                        <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                      </svg>
-                      <span>Sign in with Google</span>
-                    </button>
-                  </div>
-                ) : (
-                  <div>
-                    <div className="flex items-center mb-4">
-                      <img
-                        src={userProfile.avatar}
-                        alt={userProfile.name}
-                        className="w-10 h-10 rounded-full mr-3"
-                      />
-                      <div>
-                        <p className="font-semibold">{userProfile.name}</p>
-                        <p className="text-sm text-gray-500">{userProfile.email}</p>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block font-semibold mb-2" style={{ color: themeColors.primary }}>
-                          Rating
-                        </label>
-                        <div className="flex items-center">
-                          {renderStars(newReview.rating, true, (rating) => 
-                            setNewReview({...newReview, rating})
-                          )}
-                          <span className="ml-2 text-gray-600">{newReview.rating}/5</span>
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <label className="block font-semibold mb-2" style={{ color: themeColors.primary }}>
-                          Review Title *
-                        </label>
-                        <input
-                          type="text"
-                          value={newReview.title}
-                          onChange={(e) => setNewReview({...newReview, title: e.target.value})}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-2"
-                          style={{ focusBorderColor: themeColors.accent }}
-                          onFocus={(e) => e.target.style.borderColor = themeColors.accent}
-                          onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
-                          placeholder="Summarize your experience"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="mt-4">
-                      <label className="block font-semibold mb-2" style={{ color: themeColors.primary }}>
-                        Your Review *
-                      </label>
-                      <textarea
-                        value={newReview.comment}
-                        onChange={(e) => setNewReview({...newReview, comment: e.target.value})}
-                        rows={4}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-2"
-                        onFocus={(e) => e.target.style.borderColor = themeColors.accent}
-                        onBlur={(e) => e.target.style.borderColor = '#d1d5db'}
-                        placeholder="Share your thoughts about this product..."
-                      />
-                    </div>
-
-                    <button
-                      onClick={handleSubmitReview}
-                      className="mt-4 px-6 py-3 text-white font-semibold rounded-lg transition-all hover:shadow-lg"
-                      style={{ backgroundColor: themeColors.accent }}
-                      onMouseEnter={(e) => e.target.style.backgroundColor = themeColors.secondary}
-                      onMouseLeave={(e) => e.target.style.backgroundColor = themeColors.accent}
-                    >
-                      Submit Review
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {/* Existing Reviews */}
-              <div className="space-y-6">
-                {reviews.map((review) => (
-                  <div key={review.id} className="border-b pb-6 last:border-b-0">
-                    <div className="flex items-start space-x-4">
-                      <img
-                        src={review.user.avatar}
-                        alt={review.user.name}
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
-                      <div className="flex-1">
-                        <div className="flex items-center mb-2">
-                          <h4 className="font-semibold mr-2">{review.user.name}</h4>
-                          {review.user.verified && (
-                            <span 
-                              className="text-xs px-2 py-1 rounded-full text-white"
-                              style={{ backgroundColor: themeColors.success }}
-                            >
-                              Verified Purchase
-                            </span>
-                          )}
-                        </div>
-                        
-                        <div className="flex items-center mb-2">
-                          {renderStars(review.rating)}
-                          <span className="ml-2 text-sm text-gray-500">{review.date}</span>
-                        </div>
-                        
-                        <h5 className="font-semibold mb-2" style={{ color: themeColors.primary }}>
-                          {review.title}
-                        </h5>
-                        
-                        <p className="text-gray-700 mb-3">{review.comment}</p>
-                        
-                        {review.images.length > 0 && (
-                          <div className="flex space-x-2 mb-3">
-                            {review.images.map((image, index) => (
-                              <img
-                                key={index}
-                                src={image}
-                                alt={`Review image ${index + 1}`}
-                                className="w-20 h-20 object-cover rounded-lg"
-                              />
-                            ))}
-                          </div>
-                        )}
-                        
-                        <div className="flex items-center text-sm text-gray-500">
-                          <button className="flex items-center space-x-1 hover:text-gray-700">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V9a2 2 0 00-2-2V5a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2h2m7-10l3.5 7" />
-                            </svg>
-                            <span>Helpful ({review.helpful})</span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
       </div>
-
-      {/* Cart Modal */}
-      <CartModal />
     </div>
   );
 };
 
-// Main App Component with CartProvider
-export default function App() {
+// Cart Icon Component
+const CartIcon = () => {
+  const { getTotalItems, setIsCheckoutOpen } = useCart();
+
+  return (
+    <button
+      onClick={() => setIsCheckoutOpen(true)}
+      className="fixed top-4 right-4 p-3 rounded-full text-white shadow-lg hover:opacity-90 transition-opacity z-40"
+      style={{ backgroundColor: colors.accent }}
+    >
+      <div className="relative">
+        <ShoppingCart size={24} />
+        {getTotalItems() > 0 && (
+          <span
+            className="absolute -top-2 -right-2 text-xs font-bold text-white rounded-full w-5 h-5 flex items-center justify-center"
+            style={{ backgroundColor: colors.primary }}
+          >
+            {getTotalItems()}
+          </span>
+        )}
+      </div>
+    </button>
+  );
+};
+
+// Checkout Modal
+const CheckoutModal = () => {
+  const { 
+    cartItems, 
+    isCheckoutOpen, 
+    setIsCheckoutOpen, 
+    getTotalPrice, 
+    updateQuantity, 
+    removeFromCart,
+    clearCart 
+  } = useCart();
+
+  const [formData, setFormData] = useState({
+    prenom: '',
+    nom: '',
+    telephone: '',
+    ville: ''
+  });
+
+  const [isOrderComplete, setIsOrderComplete] = useState(false);
+
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmitOrder = () => {
+    if (formData.prenom && formData.nom && formData.telephone && formData.ville) {
+      setIsOrderComplete(true);
+      setTimeout(() => {
+        clearCart();
+        setIsCheckoutOpen(false);
+        setIsOrderComplete(false);
+        setFormData({ prenom: '', nom: '', telephone: '', ville: '' });
+      }, 3000);
+    }
+  };
+
+  const closeModal = () => {
+    setIsCheckoutOpen(false);
+    setIsOrderComplete(false);
+  };
+
+  if (!isCheckoutOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold" style={{ color: colors.primary }}>
+              <ShoppingCart className="inline mr-2" size={28} />
+              Shopping Cart
+            </h2>
+            <button
+              onClick={closeModal}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <X size={24} />
+            </button>
+          </div>
+
+          {isOrderComplete ? (
+            <div className="text-center py-8">
+              <div 
+                className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+                style={{ backgroundColor: colors.success }}
+              >
+                <Check size={32} className="text-white" />
+              </div>
+              <h3 className="text-xl font-bold mb-2" style={{ color: colors.success }}>
+                Commande Confirmée!
+              </h3>
+              <p className="text-gray-600">
+                Merci pour votre commande. Nous vous contacterons bientôt.
+              </p>
+            </div>
+          ) : (
+            <>
+              {cartItems.length === 0 ? (
+                <div className="text-center py-8">
+                  <Package size={64} className="mx-auto mb-4 text-gray-400" />
+                  <p className="text-gray-500">Votre panier est vide</p>
+                </div>
+              ) : (
+                <>
+                  <div className="mb-6">
+                    {cartItems.map(item => (
+                      <div key={item.id} className="flex items-center border-b py-4">
+                        <img
+                          src={item.images[0]}
+                          alt={item.name}
+                          className="w-16 h-16 object-cover rounded-lg mr-4"
+                        />
+                        <div className="flex-1">
+                          <h3 className="font-semibold">{item.name}</h3>
+                          <p className="text-gray-600">${item.price}</p>
+                        </div>
+                        <div className="flex items-center">
+                          <button
+                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            className="p-1 hover:bg-gray-100 rounded"
+                          >
+                            <Minus size={16} />
+                          </button>
+                          <span className="mx-3 min-w-[2rem] text-center">{item.quantity}</span>
+                          <button
+                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            className="p-1 hover:bg-gray-100 rounded"
+                          >
+                            <Plus size={16} />
+                          </button>
+                          <button
+                            onClick={() => removeFromCart(item.id)}
+                            className="ml-4 p-1 text-red-500 hover:bg-red-50 rounded"
+                          >
+                            <X size={16} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="border-t pt-4 mb-6">
+                    <div className="flex justify-between items-center text-xl font-bold">
+                      <span>Total:</span>
+                      <span style={{ color: colors.primary }}>${getTotalPrice().toFixed(2)}</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold mb-4" style={{ color: colors.primary }}>
+                      Informations de Livraison
+                    </h3>
+                    
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Prénom *</label>
+                        <input
+                          type="text"
+                          name="prenom"
+                          value={formData.prenom}
+                          onChange={handleInputChange}
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-2"
+                          style={{ borderColor: colors.accent }}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Nom *</label>
+                        <input
+                          type="text"
+                          name="nom"
+                          value={formData.nom}
+                          onChange={handleInputChange}
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-2"
+                          style={{ borderColor: colors.accent }}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Téléphone *</label>
+                      <input
+                        type="tel"
+                        name="telephone"
+                        value={formData.telephone}
+                        onChange={handleInputChange}
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-2"
+                        style={{ borderColor: colors.accent }}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Ville ou Adresse *</label>
+                      <input
+                        type="text"
+                        name="ville"
+                        value={formData.ville}
+                        onChange={handleInputChange}
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-2"
+                        style={{ borderColor: colors.accent }}
+                      />
+                    </div>
+
+                    <button
+                      onClick={handleSubmitOrder}
+                      className="w-full py-3 px-6 rounded-lg text-white font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
+                      style={{ backgroundColor: colors.success }}
+                      disabled={!formData.prenom || !formData.nom || !formData.telephone || !formData.ville}
+                    >
+                      Confirmer la Commande
+                    </button>
+                  </div>
+                </>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Product Card Component
+const ProductCard = ({ product, onClick }) => {
+  const { addToCart } = useCart();
+
+  const handleQuickAdd = (e) => {
+    e.stopPropagation();
+    addToCart(product);
+  };
+
+  return (
+    <div
+      onClick={onClick}
+      className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1 overflow-hidden"
+    >
+      <div className="relative">
+        <img
+          src={product.images[0]}
+          alt={product.name}
+          className="w-full h-48 object-cover"
+        />
+        <div className="absolute top-3 left-3 text-2xl">{product.icon}</div>
+        <div className="absolute top-3 right-3 flex items-center text-yellow-400">
+          <Star size={16} fill="currentColor" />
+          <span className="text-white text-sm ml-1 bg-black bg-opacity-50 px-1 rounded">
+            {product.rating}
+          </span>
+        </div>
+      </div>
+
+      <div className="p-6">
+        <h3 className="font-bold text-lg mb-2" style={{ color: colors.primary }}>
+          {product.name}
+        </h3>
+        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+          {product.description}
+        </p>
+        
+        <div className="flex flex-wrap gap-1 mb-4">
+          {product.features.slice(0, 2).map((feature, index) => (
+            <span
+              key={index}
+              className="text-xs px-2 py-1 rounded-full text-white"
+              style={{ backgroundColor: colors.secondary }}
+            >
+              {feature}
+            </span>
+          ))}
+        </div>
+
+        <div className="flex items-center justify-between">
+          <span className="text-2xl font-bold" style={{ color: colors.primary }}>
+            ${product.price}
+          </span>
+          <button
+            onClick={handleQuickAdd}
+            className="px-4 py-2 rounded-lg text-white font-medium hover:opacity-90 transition-opacity"
+            style={{ backgroundColor: colors.accent }}
+          >
+            Quick Add
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Main ProductSalesPage Component
+const ProductSalesPage = ({ colors: appColors }) => {
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleProductClick = (product) => {
+    setSelectedProduct(product);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedProduct(null);
+  };
+
   return (
     <CartProvider>
-      <ProductSalesPage />
+      <div className="min-h-screen" style={{ backgroundColor: colors.light }}>
+        <div className="py-8 px-4" style={{ backgroundColor: colors.primary }}>
+          <div className="max-w-6xl mx-auto">
+            <h1 className="text-4xl font-bold text-white text-center mb-2">
+              Collection Déodorants Premium
+            </h1>
+            <p className="text-center text-gray-200">
+              Découvrez notre gamme de déodorants de qualité supérieure
+            </p>
+          </div>
+        </div>
+
+        <div className="max-w-6xl mx-auto p-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {sampleProducts.map(product => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                onClick={() => handleProductClick(product)}
+              />
+            ))}
+          </div>
+        </div>
+
+        <CartIcon />
+        <ProductDetailModal
+          product={selectedProduct}
+          isOpen={isModalOpen}
+          onClose={closeModal}
+        />
+        <CheckoutModal />
+      </div>
     </CartProvider>
   );
-}
+};
+
+export default ProductSalesPage;
