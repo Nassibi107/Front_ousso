@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronDown, HelpCircle, Sparkles, Leaf, Shield, Clock, Users, Check } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 function FAQ({ colors = {} }) {
   // Default colors matching your palette
@@ -197,12 +198,18 @@ function FAQ({ colors = {} }) {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+              href="https://wa.me/1234567890"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <button className="px-8 py-3 rounded-full font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-lg bg-gradient-to-r from-teal-600 to-green-600 hover:from-teal-700 hover:to-green-700">
                 💬 Chat en Direct
               </button>
-              <button className="px-8 py-3 rounded-full font-bold transition-all duration-300 hover:scale-105 hover:shadow-lg border-2 hover:bg-white" style={{color: finalColors.primary, borderColor: finalColors.primary}}>
-                📧 Nous Contacter
-              </button>
+            </a>
+                <Link to="/contact" className="px-8 py-3 rounded-full font-bold transition-all duration-300 hover:scale-105 hover:shadow-lg border-2 hover:bg-white" style={{color: finalColors.primary, borderColor: finalColors.primary}}>
+              📧 Nous Contacter
+              </Link>
             </div>
           </div>
         </div>

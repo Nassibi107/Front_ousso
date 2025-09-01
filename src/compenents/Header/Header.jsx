@@ -1,5 +1,6 @@
 import React ,{useState , useEffect}from 'react'
 
+import { Link } from 'react-router-dom';
 
 
 import LOGO from '../../assets/logo.png';
@@ -36,14 +37,14 @@ function Header({ colors }) {
                 Products
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-current transition-all duration-300 group-hover:w-full"></span>
               </a>
-              <a href="#testimonials" className="relative font-semibold text-lg tracking-wide hover:opacity-80 hover:scale-105 transition-all duration-300 group" style={{color: colors.primary}}>
+                    <Link className='relative font-semibold text-lg tracking-wide hover:opacity-80 hover:scale-105 transition-all duration-300 group' to="/testimonials" style={{ color: colors.primary }}>  
                 Reviews
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-current transition-all duration-300 group-hover:w-full"></span>
-              </a>
-              <a href="#contact" className="relative font-semibold text-lg tracking-wide hover:opacity-80 hover:scale-105 transition-all duration-300 group" style={{color: colors.primary}}>
-                Contact
+              </Link>
+                <Link className='relative font-semibold text-lg tracking-wide hover:opacity-80 hover:scale-105 transition-all duration-300 group' to="/contact" style={{ color: colors.primary }}>  Contact
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-current transition-all duration-300 group-hover:w-full"></span>
-              </a>
+                </Link>
+
               <a href="#faq" className="relative font-semibold text-lg tracking-wide hover:opacity-80 hover:scale-105 transition-all duration-300 group" style={{color: colors.primary}}>
                 FAQ
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-current transition-all duration-300 group-hover:w-full"></span>
