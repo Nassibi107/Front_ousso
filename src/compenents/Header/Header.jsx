@@ -17,13 +17,12 @@ function Header({ colors }) {
   }, []);
 
   return (
-   <header className={`fixed w-full z-50 transition-all duration-300 ${scrollY > 50 ? 'bg-white shadow-lg' : 'bg-transparent'}`}>
+   <header className={`fixed w-full z-30 transition-all duration-300 ${scrollY > 50 ? 'bg-white shadow-lg' : 'bg-transparent'}`}>
           <nav className="container mx-auto px-6 py-4">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-evenly">
               <div className="text-2xl font-bold" style={{color: colors.primary}}>
                 <img src={LOGO} alt="Logo" className="w-50 h-15" />
               </div>
-                            
             <div className="hidden md:flex space-x-10">
               <a href="#home" className="relative font-semibold text-lg tracking-wide hover:opacity-80 hover:scale-105 transition-all duration-300 group" style={{color: colors.primary}}>
                 Home
