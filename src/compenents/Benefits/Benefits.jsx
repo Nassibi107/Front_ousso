@@ -5,7 +5,7 @@ import hero from '../../assets/hero.jpg';
 
 function Benefits({ colors }) {
   return (
-    <section className="py-20" style={{ backgroundColor: colors.light }}>
+    <section className="py-20" id="benefits" style={{ backgroundColor: colors.light }}>
       <div className="container mx-auto px-6">
         <div className="grid md:grid-cols-2 gap-16 items-center">
           

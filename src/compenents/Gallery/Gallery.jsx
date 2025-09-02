@@ -4,9 +4,10 @@ import './Gallery.css';
 
 import Flag from '../../assets/fff.jpg';
 import Flag1 from '../../assets/ffff.jpg';
-import women from '../../assets/womenLive.jpg';
+import fdf from '../../assets/fdf.jpg';
+import women from '../../assets/dds.jpg';
 import ere from '../../assets/ere.jpg';
-import trtyh from '../../assets/trtyh.jpg';
+import trtyh from '../../assets/dsfs.jpg';
 function Gallery({colors}) {
   return (
      <div className="gallery" id="gallery">
@@ -39,7 +40,7 @@ function Gallery({colors}) {
                 </div>
                 <div className="box">
                   <div className="image">
-                    <img src={Flag1} alt="" />
+                    <img src={fdf} alt="" />
                   </div>
                 </div>
               </div>
