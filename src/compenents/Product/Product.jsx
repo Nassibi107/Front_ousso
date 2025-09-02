@@ -5,31 +5,34 @@ import {
   MapPin, Phone, User, CreditCard
 } from 'lucide-react';
 
+import women from "../../assets/man.png"
+import man from "../../assets/women.png"
+import manWomen from "../../assets/w+m.png"
 
 const productImages = {
-  women: 'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=400&h=400&fit=crop',
-  man: 'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&h=400&fit=crop',
-  manWomen: 'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=400&h=400&fit=crop'
+  women,
+  man,
+  manWomen
 };
 
 const productGalleryImages = {
   women: [
-    'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=400&h=400&fit=crop',
+    women,
     'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=400&h=400&fit=crop',
     'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&h=400&fit=crop',
     'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop'
   ],
   man: [
-    'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&h=400&fit=crop',
+      man,
     'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=400&h=400&fit=crop',
     'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=400&h=400&fit=crop',
     'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop'
   ],
-  manWomen: [
-    'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=400&h=400&fit=crop',
+  manWomen:  [
+    manWomen,
     'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&h=400&fit=crop',
     'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=400&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop'
+    'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop',
   ]
 };
 
@@ -212,9 +215,18 @@ const ProductDetailModal = ({ product, isOpen, onClose, colors }) => {
               <div className="mb-8">
                 <h3 className="text-xl font-semibold mb-4 text-gray-800">Description</h3>
                 <p className="text-gray-600 leading-relaxed">
-                  Découvrez notre déodorant naturel OUSSO BODY, spécialement formulé pour offrir une protection efficace toute la journée. 
-                  Sans aluminium ni parabènes, il respecte votre peau tout en vous garantissant une fraîcheur durable. 
-                  Sa formule unique aux extraits naturels neutralise les odeurs et régule la transpiration naturellement.
+
+                  {
+                    product.id == 2? `Découvrez le pack Ousso Body, 
+                    le duo naturel qui garde toute la famille fraîche et protégée toute 
+                    la journée. Le déodorant unisexe, aux senteurs de bergamote, violette, fleur d’oranger et vanille, accompagne chacun de vos moments, au travail, au sport ou après la douche. Le déodorant féminin, aux notes de vanille, pamplemousse et 
+                    fleurs, garde la peau douce et fraîche en toute occasion. 0% alcool, 0% aluminium – 
+                    le choix sain pour tous.`  : product.id == 3 ? `Le nouveau déodorant unisexe Ousso Body t’accompagne partout ,au travail, au sport ou après la douche. Avec ses senteurs naturelles de bergamote, violette, 
+                    fleur d’oranger et vanille, il garde ta peau fraîche et propre toute la journée. 0% alcool, 0% aluminium.` 
+                    : `Le déodorant féminin Ousso Body est ton allié de chaque jour : au travail, pendant tes sorties ou après la douche. Avec ses senteurs naturelles de vanille,
+                     pamplemousse et fleurs, il garde ta peau douce et fraîche toute la journée. 0% alcool, 0% aluminium.`
+                  }
+      
                 </p>
               </div>
 
@@ -666,8 +678,8 @@ const Product = ({ colors = {} }) => {
     {
       id: 1,
       name: 'Déodorant Naturel Femme',
-      price: '129 DH',
-      originalPrice: '149 DH',
+      price: '149 DH',
+      originalPrice: '170 DH',
       features: ['Essentiel Beauté', 'SPF Protection', 'Pour Femme', 'Formule Délicate'],
       image: productImages.women,
       imageKey: 'women',
@@ -686,8 +698,8 @@ const Product = ({ colors = {} }) => {
     {
       id: 3,
       name: 'Déodorant Naturel unisexe',
-      price: '129 DH',
-      originalPrice: '149 DH',
+      price: '149 DH',
+      originalPrice: '170 DH',
       features: ['Formule Unisexe', 'Extra Forte', 'Parfum Frais', 'Longue Durée'],
       bgColor: 'from-green-50 to-emerald-50',
       image: productImages.man,

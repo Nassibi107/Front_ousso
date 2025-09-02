@@ -2,12 +2,12 @@ import React from 'react'
 
 import './Gallery.css';
 
-import Flag from '../../assets/fff.jpg';
-import Flag1 from '../../assets/ffff.jpg';
-import fdf from '../../assets/fdf.jpg';
-import women from '../../assets/dds.jpg';
-import ere from '../../assets/ere.jpg';
-import trtyh from '../../assets/dsfs.jpg';
+import Flag from '../../assets/Frame 17.png';
+import Flag1 from '../../assets/Frame 18.png';
+import fdf from '../../assets/Frame 19.png';
+import women from '../../assets/Frame 20.png';
+import ere from '../../assets/Frame 21.png';
+import trtyh from '../../assets/Frame 22.png';
 function Gallery({colors}) {
   return (
      <div className="gallery" id="gallery">
