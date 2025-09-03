@@ -8,6 +8,19 @@ import {
 import women from "../../assets/man.png"
 import man from "../../assets/women.png"
 import manWomen from "../../assets/w+m.png"
+import  ss from "../../assets/yess.jpg"
+import  img1un from "../../assets/unsex1.png"
+import  img2un from "../../assets/unsex2.png"
+import  img3nn from "../../assets/unsex3.png"
+import  femme1 from "../../assets/femme1.jpg"
+import  femme2 from "../../assets/femme2.jpg"
+import  femme3 from "../../assets/femme3.jpg"
+import  pack1 from "../../assets/pack1.png"
+import  pack2 from "../../assets/pack2.png"
+import  pack3 from "../../assets/pack3.png"
+// import  img4un from "../../assets/unsex4.png"
+
+
 
 const productImages = {
   women,
@@ -18,21 +31,21 @@ const productImages = {
 const productGalleryImages = {
   women: [
     women,
-    'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=400&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop'
+   femme1,
+   femme2,
+   femme3
   ],
   man: [
       man,
-    'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=400&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=400&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop'
+     img1un,
+   img2un,
+   img3nn
   ],
   manWomen:  [
     manWomen,
-    'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=400&h=400&fit=crop',
-    'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop',
+   pack1,
+   pack2,
+   pack3
   ]
 };
 
@@ -79,8 +92,10 @@ const CartProvider = ({ children }) => {
 
   const getTotalPrice = () => {
     return cartItems.reduce((total, item) => {
+  
+     
       const price = parseFloat(item.price.replace(' DH', ''));
-      return total + price * item.quantity;
+      return total + price * item.quantity ;
     }, 0);
   };
 
@@ -215,7 +230,6 @@ const ProductDetailModal = ({ product, isOpen, onClose, colors }) => {
               <div className="mb-8">
                 <h3 className="text-xl font-semibold mb-4 text-gray-800">Description</h3>
                 <p className="text-gray-600 leading-relaxed">
-
                   {
                     product.id == 2? `Découvrez le pack Ousso Body, 
                     le duo naturel qui garde toute la famille fraîche et protégée toute 
@@ -471,10 +485,19 @@ const CheckoutModal = ({ onClose, colors, onBack }) => {
                 <div className="border-t pt-3">
                   <div className="flex justify-between text-xl font-bold">
                     <span>Total:</span>
-                    <span style={{color: colors.primary}}>{getTotalPrice().toFixed(2)} DH</span>
+                   
+                    {
+                      getTotalPrice() > 400  ?
+                       <span style={{color: colors.primary}}> {   parseFloat(getTotalPrice()).toFixed(2)} DH</span> 
+                       : <span style={{color: colors.primary}}> {   parseFloat(getTotalPrice() + 35).toFixed(2)} DH</span>
+                    }
                   </div>
                   <div className="text-sm text-gray-500 mt-1">
-                    Livraison gratuite incluse
+                    {
+                      getTotalPrice() > 400 ? `Félicitations! Vous bénéficiez d'une remise de 35 DH sur votre commande.` 
+                      : `Frais de livraison : +35 DH. Livraison gratuite à partir de 400 DH d'achat.`
+                    }
+    
                   </div>
                 </div>
               </div>
@@ -679,7 +702,7 @@ const Product = ({ colors = {} }) => {
       id: 1,
       name: 'Déodorant Naturel Femme',
       price: '149 DH',
-      originalPrice: '170 DH',
+      // originalPrice: '170 DH',
       features: ['Essentiel Beauté', 'SPF Protection', 'Pour Femme', 'Formule Délicate'],
       image: productImages.women,
       imageKey: 'women',
@@ -689,6 +712,7 @@ const Product = ({ colors = {} }) => {
       id: 2,
       name: 'Déodorant Naturel Classic',
       price: '199 DH',
+      originalPrice: '310 DH',
       features: ['Routine Quotidien', 'SPF Protection', 'Efficace 48 heures', 'Ralentit la repousse'],
       popular: true,
       image: productImages.manWomen,
@@ -699,7 +723,7 @@ const Product = ({ colors = {} }) => {
       id: 3,
       name: 'Déodorant Naturel unisexe',
       price: '149 DH',
-      originalPrice: '170 DH',
+      // originalPrice: '170 DH',
       features: ['Formule Unisexe', 'Extra Forte', 'Parfum Frais', 'Longue Durée'],
       bgColor: 'from-green-50 to-emerald-50',
       image: productImages.man,
@@ -757,7 +781,7 @@ const Product = ({ colors = {} }) => {
           </div>
 
           {/* Products Grid */}
-          <div className="grid md:grid-cols-3 gap-8 relative z-10">
+          <div className="grid md:grid-cols-3 gap-8 relative z-10"  onClick={() => openProductModal(product)}>
             {products.map((product, index) => (
               <div 
                 key={product.id}
@@ -790,8 +814,8 @@ const Product = ({ colors = {} }) => {
                 
                 {/* Hover Glow Effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-teal-400 via-green-500 to-emerald-500 opacity-0 group-hover:opacity-20 transition-all duration-500"></div>
-                
-                <div className="relative z-10 p-8 text-center">
+
+                <div className="relative z-10 p-8 text-center" onClick={() => openProductModal(product)}>
                   {/* Product Image with 3D Animation */}
                   <div 
                     className="relative mb-8 group-hover:scale-110 transition-transform duration-500 cursor-pointer"
@@ -886,7 +910,7 @@ const Product = ({ colors = {} }) => {
           <div className="flex justify-center mt-16">
             <div className="flex items-center gap-4 px-8 py-4 bg-gradient-to-r from-teal-100 to-green-100 rounded-full shadow-lg animate-bounce border border-teal-200">
               <Sparkles className="text-teal-500 animate-spin" />
-              <span className="font-bold text-gray-700">Livraison gratuite à partir de 200 DH!</span>
+              <span className="font-bold text-gray-700">Livraison gratuite à partir de 400 DH!</span>
               <Sparkles className="text-green-500 animate-spin" style={{animationDirection: 'reverse'}} />
             </div>
           </div>
