@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Star, Quote, Heart, Users, Sparkles, TrendingUp } from 'lucide-react';
+import { Star, Quote, Heart, Users, Sparkles, TrendingUp  , LinkIcon} from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 function Testimonials({ colors = {} }) {
   // Default colors in case colors prop is undefined
@@ -140,6 +141,9 @@ function Testimonials({ colors = {} }) {
             <p className="text-lg opacity-80" style={{color: finalColors.secondary}}>
               Plus de 15,000 avis vérifiés
             </p>
+            <Link to="/testimonials" className=" inline-flex items-center mt-4 text-sm font-medium text-blue-600 hover:underline" >
+             <LinkIcon /> Voir tous les avis WhatsApp 
+            </Link>
           </div>
         </div>
 

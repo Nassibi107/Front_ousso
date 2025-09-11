@@ -27,9 +27,10 @@ function Header({ colors }) {
     { href: '#home', label: 'Home', type: 'anchor' },
     { href: '#features', label: 'Features', type: 'anchor' },
     { href: '#products', label: 'Products', type: 'anchor' },
-    { to: '/testimonials', label: 'Reviews', type: 'link' },
+    { href: '#testimonials', label: 'Avis', type: 'anchor' },
     { to: '/contact', label: 'Contact', type: 'link' },
-    { href: '#faq', label: 'FAQ', type: 'anchor' }
+    { href: '#faq', label: 'FAQ', type: 'anchor' },
+    { to: '/testimonials', label: 'Reviews', type: 'link' }
   ];
 
   const handleMenuClick = () => {

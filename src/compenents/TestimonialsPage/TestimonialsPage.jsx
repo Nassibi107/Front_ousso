@@ -1,322 +1,377 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { ChevronLeft, ChevronRight, Star, MessageCircle, Phone, Check, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-const TestimonialsPage = ({ colors}) => {
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
+const colors = {
+  primary: '#025984',
+  secondary: '#0a8899',
+  accent: '#0fb5a0',
+  light: '#e7d8c4',
+  success: '#01af4c'
+};
 
-  
+const TestimonialsPage = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedConversation, setSelectedConversation] = useState(null);
+  const testimonialsPerPage = 6;
 
+  // Sample testimonials data with Moroccan names - Deodorant specific
   const testimonials = [
     {
       id: 1,
-      nom: "Marie Dubois",
-      ville: "Paris",
-      produit: "Collection Élégance",
-      image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b2bb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
-      note: 5,
-      commentaire: "Absolument magnifique ! La qualité est exceptionnelle et le design correspond parfaitement à mes attentes. Je recommande vivement cette marque à tous mes amis. Le service client est également formidable.",
-      date: "15 Janvier 2025"
+      name: "Fatima El Amrani",
+      city: "Casablanca",
+      rating: 5,
+      text: "Ce déodorant est une révélation ! Fini les traces blanches sur mes vêtements noirs. Il tient toute la journée même avec la chaleur de Casablanca. Je ne peux plus m'en passer !",
+      productImage: "https://images.unsplash.com/photo-1556228724-c4b7d7c8e9de?w=300&h=200&fit=crop",
+      conversationImage: "https://images.unsplash.com/photo-1611746872915-64382b5c76da?w=400&h=300&fit=crop",
+      date: "15 Août 2024"
     },
     {
       id: 2,
-      nom: "Jean-Pierre Martin",
-      ville: "Lyon",
-      produit: "Série Premium",
-      image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1126&q=80",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
-      note: 5,
-      commentaire: "Un investissement qui en vaut la peine ! La livraison était rapide et l'emballage soigné. Le produit dépasse toutes mes espérances. Merci pour cette expérience d'achat exceptionnelle.",
-      date: "08 Janvier 2025"
+      name: "Youssef Benali",
+      city: "Rabat",
+      rating: 5,
+      text: "Enfin un déodorant qui tient ses promesses ! Protection 48h réelle, même après le sport. L'odeur est fraîche et masculine. Mon épouse l'adore aussi !",
+      productImage: "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=300&h=200&fit=crop",
+      conversationImage: "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=400&h=300&fit=crop",
+      date: "28 Juillet 2024"
     },
     {
       id: 3,
-      nom: "Sophie Leroy",
-      ville: "Marseille",
-      produit: "Edition Limitée",
-      image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-      note: 5,
-      commentaire: "Parfait en tous points ! Design moderne, qualité irréprochable et un service après-vente au top. Je n'hésiterai pas à recommander et à repasser commande très bientôt.",
-      date: "03 Janvier 2025"
+      name: "Aicha Lahlou",
+      city: "Marrakech",
+      rating: 5,
+      text: "Parfait pour le climat chaud de Marrakech ! Ce déodorant ne laisse aucune trace et reste efficace toute la journée. Ma peau sensible le tolère parfaitement.",
+      productImage: "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=300&h=200&fit=crop",
+      conversationImage: "https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=400&h=300&fit=crop",
+      date: "10 Septembre 2024"
     },
     {
       id: 4,
-      nom: "Pierre Rousseau",
-      ville: "Toulouse",
-      produit: "Gamme Classique",
-      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1099&q=80",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-      note: 4,
-      commentaire: "Très satisfait de mon achat ! Rapport qualité-prix excellent. Quelques petites améliorations possibles mais dans l'ensemble, c'est un produit que je recommande sans hésitation.",
-      date: "28 Décembre 2024"
+      name: "Omar Chakir",
+      city: "Fès",
+      rating: 5,
+      text: "Excellent déodorant ! Plus de problème de transpiration excessive. Le parfum est subtil et élégant. Rapport qualité-prix imbattable comparé aux marques internationales.",
+      productImage: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=300&h=200&fit=crop",
+      conversationImage: "https://images.unsplash.com/photo-1512428813834-c702c7702b78?w=400&h=300&fit=crop",
+      date: "3 Août 2024"
     },
     {
       id: 5,
-      nom: "Camille Bernard",
-      ville: "Nice",
-      produit: "Collection Moderne",
-      image: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1100&q=80",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=764&q=80",
-      note: 5,
-      commentaire: "Une découverte fantastique ! Je cherchais depuis longtemps ce type de produit et je suis ravie d'avoir trouvé cette marque. La qualité est au rendez-vous et le design est sublime.",
-      date: "20 Décembre 2024"
+      name: "Khadija Tazi",
+      city: "Tanger",
+      rating: 5,
+      text: "Ce déodorant a changé ma vie ! Fini le stress des auréoles sur mes chemisiers. Protection longue durée garantie, même lors de mes réunions importantes.",
+      productImage: "https://images.unsplash.com/photo-1567721913486-6585f069b332?w=300&h=200&fit=crop",
+      conversationImage: "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=400&h=300&fit=crop",
+      date: "22 Septembre 2024"
+    },
+    {
+      id: 6,
+      name: "Rachid Bennani",
+      city: "Agadir",
+      rating: 5,
+      text: "Formule révolutionnaire ! Ce déodorant anti-transpirant me donne une confiance totale. Idéal pour les journées chaudes d'Agadir. Je le recommande à tous mes collègues !",
+      productImage: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=200&fit=crop",
+      conversationImage: "https://images.unsplash.com/photo-1553484771-371a605b060b?w=400&h=300&fit=crop",
+      date: "5 Septembre 2024"
+    },
+    {
+      id: 7,
+      name: "Salma Idrissi",
+      city: "Meknès",
+      rating: 5,
+      text: "Déodorant de qualité premium ! Texture agréable, séchage rapide et efficacité prouvée. Plus jamais de gêne ou d'inconfort. Un vrai plaisir à utiliser au quotidien.",
+      productImage: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=300&h=200&fit=crop",
+      conversationImage: "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=400&h=300&fit=crop",
+      date: "18 Août 2024"
+    },
+    {
+      id: 8,
+      name: "Hassan Alaoui",
+      city: "Oujda",
+      rating: 5,
+      text: "Enfin un déodorant qui respecte ma peau ! Formule sans aluminium mais super efficace. L'équipe m'a bien conseillé sur WhatsApp pour choisir le bon parfum.",
+      productImage: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=200&fit=crop",
+      conversationImage: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=300&fit=crop",
+      date: "12 Juillet 2024"
+    },
+    {
+      id: 9,
+      name: "Naima Berrada",
+      city: "Tétouan",
+      rating: 5,
+      text: "Protection maximale assurée ! Ce déodorant tient toutes ses promesses. Parfum délicat et féminin, application facile. Mes vêtements restent impeccables toute la journée !",
+      productImage: "https://images.unsplash.com/photo-1567721913486-6585f069b332?w=300&h=200&fit=crop",
+      conversationImage: "https://images.unsplash.com/photo-1588421357574-87938a86fa28?w=400&h=300&fit=crop",
+      date: "1er Septembre 2024"
     }
   ];
 
-  const renderStars = (rating) => {
-    return [...Array(5)].map((_, index) => (
-      <svg
-        key={index}
-        className={`w-5 h-5 ${index < rating ? 'text-yellow-400' : 'text-gray-300'}`}
-        fill="currentColor"
-        viewBox="0 0 20 20"
-      >
-        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-      </svg>
-    ));
+  // Pagination logic
+  const totalPages = Math.ceil(testimonials.length / testimonialsPerPage);
+  const startIndex = (currentPage - 1) * testimonialsPerPage;
+  const currentTestimonials = testimonials.slice(startIndex, startIndex + testimonialsPerPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const StarRating = ({ rating }) => {
+    return (
+      <div className="flex space-x-1">
+        {[...Array(5)].map((_, i) => (
+          <Star
+            key={i}
+            className={`w-5 h-5 ${
+              i < rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
+            }`}
+          />
+        ))}
+      </div>
+    );
+  };
+
+  const closeModal = () => {
+    setSelectedConversation(null);
   };
 
   return (
-    <div 
-      className="min-h-screen relative"
-      style={{
-        background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 35%, ${colors.accent} 100%)`
-      }}
-    >
-      {/* Nature Background Pattern */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute inset-0" style={{
-          backgroundImage: 'radial-gradient(circle at 25px 25px, rgba(255,255,255,0.2) 2px, transparent 2px), radial-gradient(circle at 75px 75px, rgba(255,255,255,0.1) 2px, transparent 2px)',
-          backgroundSize: '50px 50px'
-        }} />
-      </div>
-
-      {/* Floating Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div 
-          className="absolute w-8 h-8 opacity-20 animate-pulse"
-          style={{ 
-            top: '15%', 
-            left: '10%',
-            background: colors.light,
-            clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)'
-          }}
-        />
-        <div 
-          className="absolute w-6 h-6 opacity-30 animate-pulse"
-          style={{ 
-            top: '25%', 
-            right: '15%',
-            background: colors.light,
-            borderRadius: '0 100% 0 100%',
-            animationDelay: '1s'
-          }}
-        />
-        <div 
-          className="absolute w-10 h-10 opacity-15 animate-pulse"
-          style={{ 
-            bottom: '20%', 
-            left: '5%',
-            background: colors.light,
-            clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)',
-            animationDelay: '2s'
-          }}
-        />
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 py-12 relative z-10">
-        {/* Header Section */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Témoignages Clients
+    <div className="min-h-screen" style={{ backgroundColor: colors.light }}>
+      {/* Header */}
+      <div className="py-16 px-4" style={{ backgroundColor: colors.primary }}>
+        <div className="max-w-6xl mx-auto text-center">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
+            Témoignages Déodorants
           </h1>
-          <p className="text-xl text-white opacity-90 max-w-3xl mx-auto">
-            Découvrez ce que nos clients pensent de nos produits. Leurs expériences authentiques 
-            et leurs photos témoignent de la qualité de nos créations.
+          <p className="text-xl text-white opacity-90 max-w-2xl mx-auto">
+            Découvrez pourquoi nos déodorants révolutionnaires transforment le quotidien de nos clients
           </p>
         </div>
+      </div>
 
-        {/* Featured Testimonial */}
-        <div 
-          className="bg-white rounded-2xl shadow-2xl p-8 mb-12 backdrop-blur-sm"
-          style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}
-        >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            <div>
-              <img
-                src={testimonials[activeTestimonial].image}
-                alt={testimonials[activeTestimonial].produit}
-                className="w-full h-80 object-cover rounded-xl shadow-lg"
-              />
+      {/* Stats Section */}
+      <div className="py-12 px-4" style={{ backgroundColor: colors.secondary }}>
+        <div className="max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div className="text-white">
+              <div className="text-3xl font-bold mb-2">500+</div>
+              <div className="text-lg opacity-90">Clients Satisfaits</div>
             </div>
-            <div>
-              <div className="flex items-center mb-4">
-                <img
-                  src={testimonials[activeTestimonial].avatar}
-                  alt={testimonials[activeTestimonial].nom}
-                  className="w-16 h-16 rounded-full object-cover mr-4"
-                />
-                <div>
-                  <h3 className="text-xl font-bold" style={{ color: colors.primary }}>
-                    {testimonials[activeTestimonial].nom}
-                  </h3>
-                  <p className="text-gray-600">{testimonials[activeTestimonial].ville}</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center mb-4">
-                {renderStars(testimonials[activeTestimonial].note)}
-                <span className="ml-2 text-gray-600">
-                  {testimonials[activeTestimonial].note}/5 étoiles
-                </span>
-              </div>
-
-              <h4 
-                className="text-lg font-semibold mb-3"
-                style={{ color: colors.secondary }}
-              >
-                Produit: {testimonials[activeTestimonial].produit}
-              </h4>
-              
-              <blockquote className="text-gray-700 text-lg italic mb-4 leading-relaxed">
-                "{testimonials[activeTestimonial].commentaire}"
-              </blockquote>
-              
-              <p className="text-sm text-gray-500">
-                Publié le {testimonials[activeTestimonial].date}
-              </p>
+            <div className="text-white">
+              <div className="text-3xl font-bold mb-2">4.9/5</div>
+              <div className="text-lg opacity-90">Note Moyenne</div>
+            </div>
+            <div className="text-white">
+              <div className="text-3xl font-bold mb-2">98%</div>
+              <div className="text-lg opacity-90">Recommandations</div>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Testimonial Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {testimonials.map((testimonial, index) => (
-            <div
-              key={testimonial.id}
-              className={`bg-white rounded-xl shadow-lg p-6 cursor-pointer transition-all duration-300 hover:shadow-xl hover:scale-105 backdrop-blur-sm ${
-                index === activeTestimonial ? 'ring-4' : ''
+      {/* Testimonials Grid */}
+      <div className="py-16 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {currentTestimonials.map((testimonial) => (
+              <div
+                key={testimonial.id}
+                className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+              >
+                {/* Deodorant Product Image */}
+                <div className="h-48 overflow-hidden">
+                  <img
+                    src={testimonial.productImage}
+                    alt="Déodorant"
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+
+                {/* Content */}
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 className="font-bold text-lg" style={{ color: colors.primary }}>
+                        {testimonial.name}
+                      </h3>
+                      <p className="text-gray-600 text-sm">{testimonial.city}</p>
+                    </div>
+                    <StarRating rating={testimonial.rating} />
+                  </div>
+
+                  <p className="text-gray-700 mb-4 leading-relaxed">
+                    {testimonial.text}
+                  </p>
+
+                  {/* WhatsApp Conversation Preview */}
+                  <div className="bg-gray-50 rounded-lg p-3 mb-4">
+                    <div className="flex items-center mb-2">
+                      <MessageCircle className="w-4 h-4 mr-2" style={{ color: colors.accent }} />
+                      <span className="text-sm font-medium">Conversation WhatsApp</span>
+                    </div>
+                    <img
+                      src={testimonial.conversationImage}
+                      alt="Conversation"
+                      className="w-full h-20 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity"
+                      onClick={() => setSelectedConversation(testimonial)}
+                    />
+                    <p className="text-xs text-gray-500 mt-1">Cliquer pour agrandir</p>
+                  </div>
+
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-500">{testimonial.date}</span>
+                    <div className="flex items-center" style={{ color: colors.success }}>
+                      <Check className="w-4 h-4 mr-1" />
+                      <span>Vérifié</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Pagination */}
+          <div className="flex justify-center items-center space-x-4 mt-12">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`flex items-center px-4 py-2 rounded-lg transition-colors duration-200 ${
+                currentPage === 1
+                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
               }`}
-              style={{ 
-                backgroundColor: 'rgba(255, 255, 255, 0.90)',
-                ringColor: index === activeTestimonial ? colors.accent : 'transparent'
-              }}
-              onClick={() => setActiveTestimonial(index)}
             >
-              <div className="relative mb-4">
-                <img
-                  src={testimonial.image}
-                  alt={testimonial.produit}
-                  className="w-full h-48 object-cover rounded-lg"
-                />
-                <div 
-                  className="absolute top-3 right-3 px-3 py-1 rounded-full text-white text-sm font-semibold"
-                  style={{ backgroundColor: colors.accent }}
-                >
-                  {testimonial.produit}
-                </div>
-              </div>
-              
-              <div className="flex items-center mb-3">
-                <img
-                  src={testimonial.avatar}
-                  alt={testimonial.nom}
-                  className="w-10 h-10 rounded-full object-cover mr-3"
-                />
-                <div>
-                  <h4 className="font-semibold" style={{ color: colors.primary }}>
-                    {testimonial.nom}
-                  </h4>
-                  <p className="text-sm text-gray-500">{testimonial.ville}</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center mb-3">
-                {renderStars(testimonial.note)}
-              </div>
-              
-              <p className="text-gray-600 text-sm line-clamp-3">
-                "{testimonial.commentaire.substring(0, 120)}..."
-              </p>
-            </div>
-          ))}
-        </div>
+              <ChevronLeft className="w-5 h-5 mr-1" />
+              Précédent
+            </button>
 
-        {/* Statistics Section */}
+            <div className="flex space-x-2">
+              {[...Array(totalPages)].map((_, i) => {
+                const page = i + 1;
+                return (
+                  <button
+                    key={page}
+                    onClick={() => handlePageChange(page)}
+                    className={`w-10 h-10 rounded-lg transition-colors duration-200 ${
+                      currentPage === page
+                        ? 'text-white'
+                        : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
+                    }`}
+                    style={{
+                      backgroundColor: currentPage === page ? colors.primary : undefined
+                    }}
+                  >
+                    {page}
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className={`flex items-center px-4 py-2 rounded-lg transition-colors duration-200 ${
+                currentPage === totalPages
+                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-300'
+              }`}
+            >
+              Suivant
+              <ChevronRight className="w-5 h-5 ml-1" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Conversation Modal */}
+      {selectedConversation && (
         <div 
-          className="bg-white rounded-xl shadow-2xl p-8 backdrop-blur-sm"
-          style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}
+          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
+          onClick={closeModal}
         >
-          <h2 
-            className="text-3xl font-bold text-center mb-8"
-            style={{ color: colors.primary }}
+          <div 
+            className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
           >
-            Nos Chiffres de Satisfaction
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div 
-                className="text-4xl font-bold mb-2"
-                style={{ color: colors.accent }}
-              >
-                98%
+            <div className="flex items-center justify-between p-4 border-b">
+              <div className="flex items-center">
+                <MessageCircle className="w-5 h-5 mr-2" style={{ color: colors.accent }} />
+                <div>
+                  <h3 className="font-semibold" style={{ color: colors.primary }}>
+                    Conversation avec {selectedConversation.name}
+                  </h3>
+                  <p className="text-sm text-gray-600">{selectedConversation.city}</p>
+                </div>
               </div>
-              <p className="text-gray-600">Clients Satisfaits</p>
+              <button
+                onClick={closeModal}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
-            <div>
-              <div 
-                className="text-4xl font-bold mb-2"
-                style={{ color: colors.secondary }}
-              >
-                1,250+
+            <div className="p-4">
+              <img
+                src={selectedConversation.conversationImage}
+                alt="Conversation complète"
+                className="w-full max-h-96 object-contain rounded-lg"
+              />
+              <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center mb-2">
+                  <div className="flex space-x-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-4 h-4 ${
+                          i < selectedConversation.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <span className="ml-2 text-sm text-gray-600">
+                    {selectedConversation.date}
+                  </span>
+                </div>
+                <p className="text-gray-700 italic">
+                  "{selectedConversation.text}"
+                </p>
               </div>
-              <p className="text-gray-600">Témoignages Positifs</p>
-            </div>
-            <div>
-              <div 
-                className="text-4xl font-bold mb-2"
-                style={{ color: colors.success }}
-              >
-                4.9/5
-              </div>
-              <p className="text-gray-600">Note Moyenne</p>
-            </div>
-            <div>
-              <div 
-                className="text-4xl font-bold mb-2"
-                style={{ color: colors.primary }}
-              >
-                24h
-              </div>
-              <p className="text-gray-600">Délai de Réponse</p>
             </div>
           </div>
         </div>
+      )}
 
-        {/* Call to Action */}
-        <div className="text-center mt-12">
-          <h3 className="text-2xl font-bold text-white mb-4">
-            Vous aussi, partagez votre expérience !
-          </h3>
-          <p className="text-white opacity-90 mb-6 max-w-2xl mx-auto">
-            Rejoignez nos clients satisfaits et partagez vos photos et commentaires. 
-            Votre avis nous aide à nous améliorer continuellement.
+      {/* CTA Section */}
+      <div className="py-16 px-4" style={{ backgroundColor: colors.accent }}>
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl font-bold text-white mb-4">
+            Rejoignez des milliers de clients satisfaits
+          </h2>
+          <p className="text-xl text-white opacity-90 mb-8">
+            Découvrez nos déodorants haute performance et changez votre quotidien
           </p>
-          <button
-            className="px-8 py-4 rounded-lg text-white font-semibold text-lg transition-all duration-300 hover:shadow-lg hover:scale-105"
-            style={{ backgroundColor: colors.accent }}
-            onMouseEnter={(e) => {
-              e.target.style.backgroundColor = colors.secondary;
-              e.target.style.transform = 'scale(1.05)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.backgroundColor = colors.accent;
-              e.target.style.transform = 'scale(1)';
-            }}
-          >
-            Laisser un Témoignage
-          </button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+            href="https://wa.me/+212600586528"
+              className="px-8 py-3 bg-white rounded-lg font-semibold transition-transform duration-200 hover:scale-105"
+              style={{ color: colors.accent }}
+            >
+              <Phone className="w-5 h-5 inline mr-2" />
+              Contacter via WhatsApp
+            </a>
+            <Link
+              className="px-8 py-3 border-2 border-white text-white rounded-lg font-semibold hover:bg-white transition-colors duration-200"
+              to="/#products"
+              style={{ color: 'white' }}
+              onMouseEnter={(e) => e.target.style.color = colors.accent}
+              onMouseLeave={(e) => e.target.style.color = 'white'}
+            >
+              Voir nos déodorants
+            </Link>
+          </div>
         </div>
       </div>
     </div>
@@ -324,3 +379,4 @@ const TestimonialsPage = ({ colors}) => {
 };
 
 export default TestimonialsPage;
+

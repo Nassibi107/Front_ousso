@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import { ArrowRight, ChevronDown } from 'lucide-react';
 import FLAG11 from '../../assets/FLAG11.png';
 
 export default function Hero({ colors }) {
@@ -40,12 +40,14 @@ export default function Hero({ colors }) {
             </p>
 
             <motion.div className="flex flex-col sm:flex-row gap-4" variants={fadeInDelay}>
-              <button className="px-8 py-4 rounded-full  cursor-pointer font-semibold text-white transition-transform hover:scale-105" style={{ backgroundColor: colors.success }}>
+              <a href='#products' className="px-8 py-4 rounded-full  cursor-pointer font-semibold text-white transition-transform hover:scale-105" style={{ backgroundColor: colors.success }}>
                 commander
-              </button>
-              <button className={`px-8 py-4 rounded-full cursor-pointer font-semibold border-2 border-white text-white hover:scale-105 transition-colors`}>
+                <ArrowRight className="inline-block ml-2" />
+              </a>
+              <a  href='#benefits' className={`px-8 py-4 rounded-full cursor-pointer font-semibold border-2 border-white text-white hover:scale-105 transition-colors`}>
                 En savoir plus
-              </button>
+        
+              </a>
             </motion.div>
           </motion.div>
 
