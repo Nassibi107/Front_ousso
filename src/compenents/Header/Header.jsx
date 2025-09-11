@@ -357,7 +357,7 @@ function Header({ colors }) {
                 className="w-full py-2.5 px-4 font-semibold text-white text-sm rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg relative overflow-hidden group"
                 style={{ backgroundColor: colors.accent }}
               >
-                <span className="relative z-10">Get Started</span>
+                {/* <span className="relative z-10">Get Started</span> */}
                 
                 {/* Animated background */}
                 <div 
