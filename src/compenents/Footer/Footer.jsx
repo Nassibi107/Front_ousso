@@ -158,12 +158,13 @@ function Footer({colors}) {
               {/* Social Links */}
               <div className="space-y-4 mb-8">
                 {[
-                  { text: "Instagram", icon: Instagram, color: colors.accent },
-                  { text: "WhatsApp", icon: MessageCircle, color: colors.success }
+                  { text: "Instagram", icon: Instagram, color: colors.accent , link : "https://www.instagram.com/ousso.body?utm_source=ig_web_button_share_sheet&igsh=MXhtcGFhNHg2Y21rMw== " },
+                  { text: "WhatsApp", icon: MessageCircle, color: colors.success , link :"https://wa.me/+212600586528" }
                 ].map((social, i) => (
                   <a 
                     key={i}
-                    href="#"
+                    target="_blank"
+                    href={social.link}
                     className="flex items-center gap-3 p-3 rounded-lg  bg-opacity-10 backdrop-blur-sm hover:bg-opacity-20 transition-all duration-300 group"
                   >
                     <social.icon className="w-5 h-5" style={{ color: social.color }} />

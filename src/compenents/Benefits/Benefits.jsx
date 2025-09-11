@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronDown, Star, Shield, Leaf, Clock, Users, ArrowRight, Check, Menu, X } from 'lucide-react';
+import { ChevronDown, Star, Shield, Leaf, Clock, Users, ArrowRight, Check, Menu, X ,AirVent  } from 'lucide-react';
 import { motion } from 'framer-motion';
 import hero from '../../assets/hero.jpg';
 
@@ -31,6 +31,11 @@ function Benefits({ colors }) {
                   icon: Users,
                   title: 'Pour Tous',
                   desc: 'Convient à tous les types de peau, y compris les peaux sensibles',
+                },
+                {
+                  icon: AirVent ,
+                  title: 'La magie du produit',
+                  desc: 'Réduire la pousse des poils',
                 },
               ].map((benefit, index) => (
                 <div key={index} className="flex items-start space-x-4">

@@ -710,7 +710,7 @@ const Product = ({ colors = {} }) => {
     },
     {
       id: 2,
-      name: 'Déodorant Naturel Classic',
+      name: 'Déodorant Naturel Pack',
       price: '199 DH',
       originalPrice: '310 DH',
       features: ['Routine Quotidien', 'SPF Protection', 'Efficace 48 heures', 'Ralentit la repousse'],
@@ -888,7 +888,7 @@ const Product = ({ colors = {} }) => {
                   
                   {/* Enhanced Button */}
                   <button 
-                    onClick={() => addToCart(product)}
+                    // onClick={() => addToCart(product)}
                     className="relative w-full py-4 rounded-xl font-bold text-white overflow-hidden group transition-all duration-300 bg-gradient-to-r from-teal-600 to-green-600 hover:from-teal-700 hover:to-green-700 hover:scale-105 hover:shadow-xl"
                   >
                     <span className="relative z-10 flex items-center justify-center gap-2">

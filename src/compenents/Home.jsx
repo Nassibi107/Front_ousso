@@ -1,5 +1,5 @@
 import { Header, Hero, Product, Stats, Contact, 
-    Testimonials, Cta, Benefits, Features, Gallery, FAQ, Footer } from './';
+    Testimonials, Cta, Benefits, Features, Gallery, FAQ, Footer  , Panner} from './';
 
 
 const Home = ( { colors }) => {
@@ -15,6 +15,7 @@ const Home = ( { colors }) => {
       <Benefits colors={colors} />
       <FAQ colors={colors} />
       <Cta colors={colors} />
+      <Panner colors= {colors}/>
       <Footer colors={colors} />
     </div>
   );
