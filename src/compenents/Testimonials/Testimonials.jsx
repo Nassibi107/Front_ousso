@@ -3,7 +3,7 @@ import { Star, Quote, Heart, Users, Sparkles, TrendingUp  , LinkIcon} from 'luci
 import { Link } from 'react-router-dom';
 
 function Testimonials({ colors = {} }) {
-  // Default colors in case colors prop is undefined
+ 
   const defaultColors = {
     primary: '#025984',
     secondary: '#0a8899',

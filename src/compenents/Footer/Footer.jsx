@@ -200,7 +200,7 @@ function Footer({colors}) {
               <div className="flex items-center gap-6 text-white opacity-80">
                 <p>&copy; 2025 OussBody. All rights reserved.</p>
                 <span className="hidden md:block w-1 h-1 rounded-full bg-white opacity-40" />
-                <p>Made with ❤️ in Morocco</p>
+                <p>Made with OUSSO in Morocco</p>
               </div>
               
               <div className="flex items-center gap-6">

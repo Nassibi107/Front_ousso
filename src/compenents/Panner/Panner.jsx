@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Panner2 from "../../assets/panner2.jpeg"
+import Panner1 from "../../assets/cover1.png"
+import Panner2 from "../../assets/cover2.png"
+import Panner3 from "../../assets/cover3.png"
+
 
 export default function Panner() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -8,9 +11,9 @@ export default function Panner() {
 
   // Replace these with your actual image URLs
   const images = [
+    Panner1,
     Panner2,
-    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&h=800&fit=crop",
-    "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1200&h=800&fit=crop"
+    Panner3
   ];
 
   useEffect(() => {
@@ -19,8 +22,8 @@ export default function Panner() {
       setTimeout(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
         setIsTransitioning(false);
-      }, 500);
-    }, 4000);
+      }, 5000);
+    }, 10000);
 
     return () => clearInterval(interval);
   }, [images.length]);
@@ -31,7 +34,7 @@ export default function Panner() {
       setTimeout(() => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
         setIsTransitioning(false);
-      }, 500);
+      }, 5000);
     }
   };
 
@@ -58,7 +61,7 @@ export default function Panner() {
   return (
     <div className="w-full min-h-screen relative overflow-hidden" style={{ backgroundColor: '#025984' }}>
       {/* Main Image Container */}
-      <div className="relative w-full h-screen">
+      <div className="relative w-full h-screen overflow-hidden">
         {images.map((image, index) => (
           <div
             key={index}
@@ -71,7 +74,7 @@ export default function Panner() {
             <img
               src={image}
               alt={`Slide ${index + 1}`}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover object-center"
             />
             
             {/* Overlay with your colors */}
