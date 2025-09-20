@@ -85,7 +85,7 @@ export const useCart = () => {
   return context;
 };
 
-// Sample Deodorant Products Data
+// fake data of  Deodorant Products 
 const sampleProducts = [
   {
     id: 1,

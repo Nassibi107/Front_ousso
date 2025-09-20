@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import LOGO from '../../assets/logo.png';
 import { Menu, X, ChevronDown, Sparkles, ArrowRight } from 'lucide-react';
+import AlertBar from '../AlertBar/AlertBar';
 
 function Header({ colors }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -39,14 +40,15 @@ function Header({ colors }) {
 
   return (
     <header 
-      className={`fixed w-full z-30 transition-all duration-700 ease-out backdrop-blur-xl shadow-2xl border-b border-opacity-30`}
-      style={{
-        backgroundColor: 'rgba(255, 255, 255, 0.85)',
-        borderBottomColor: colors.accent
-      }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+    className={`fixed w-full z-30 transition-all duration-700 ease-out backdrop-blur-xl shadow-2xl border-b border-opacity-30`}
+    style={{
+      backgroundColor: 'rgba(255, 255, 255, 0.85)',
+      borderBottomColor: colors.accent
+    }}
+    onMouseEnter={() => setIsHovered(true)}
+    onMouseLeave={() => setIsHovered(false)}
     >
+
       {/* Dynamic gradient overlay */}
       <div 
         className="absolute inset-0 w-full h-full opacity-20 transition-opacity duration-500"

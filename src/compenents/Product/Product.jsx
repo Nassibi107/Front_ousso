@@ -8,7 +8,6 @@ import {
 import women from "../../assets/man.png"
 import man from "../../assets/women.png"
 import manWomen from "../../assets/w+m.png"
-import  ss from "../../assets/yess.jpg"
 import  img1un from "../../assets/unsex.png"
 import  img2un from "../../assets/unsex2.png"
 import  img3nn from "../../assets/unsex3.png"
@@ -18,9 +17,6 @@ import  femme3 from "../../assets/femme3.png"
 import  pack1 from "../../assets/pack1.png"
 import  pack2 from "../../assets/pack2.png"
 import  pack3 from "../../assets/pack3.png"
-// import  img4un from "../../assets/unsex4.png"
-
-
 
 const productImages = {
   women,
@@ -128,7 +124,7 @@ const useCart = () => {
   return context;
 };
 
-// Product Detail Modal
+
 const ProductDetailModal = ({ product, isOpen, onClose, colors }) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const { addToCart } = useCart();
@@ -386,7 +382,6 @@ const CartModal = ({ isOpen, onClose, colors }) => {
   );
 };
 
-// Checkout Modal
 const CheckoutModal = ({ onClose, colors, onBack }) => {
   const { cartItems, getTotalPrice, clearCart } = useCart();
   const [formData, setFormData] = useState({

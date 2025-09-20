@@ -41,7 +41,7 @@ const TestimonialsPage = () => {
       id: 3,
       name: "Aicha Lahlou",
       city: "Marrakech",
-      rating: 5,
+      rating: 2,
       text: "Parfait pour le climat chaud de Marrakech ! Ce déodorant ne laisse aucune trace et reste efficace toute la journée. Ma peau sensible le tolère parfaitement.",
       productImage: "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=300&h=200&fit=crop",
       conversationImage: "https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=400&h=300&fit=crop",

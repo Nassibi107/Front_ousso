@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, ChevronDown } from 'lucide-react';
 import FLAG11 from '../../assets/FLAG11.png';
 
+
 export default function Hero({ colors }) {
   const fadeInUp = {
     hidden: { opacity: 0, y: 30 },
@@ -21,6 +22,7 @@ export default function Hero({ colors }) {
 
   return (
     <section id="home" className="pt-20 pb-16 relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)` }}>
+    
       <div className="container mx-auto px-6 relative z-10">
         <div className="grid md:grid-cols-2 gap-12 items-center min-h-[80vh]">
 

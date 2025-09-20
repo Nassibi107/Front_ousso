@@ -1,10 +1,12 @@
 import { Header, Hero, Product, Stats, Contact, 
     Testimonials, Cta, Benefits, Features, Gallery, FAQ, Footer  , Panner} from './';
+import AlertBar from './AlertBar/AlertBar';
 
 
 const Home = ( { colors }) => {
   return (
     <div className="min-h-screen bg-white">
+      <AlertBar />
       <Header colors={colors} />
       <Hero colors={colors} />
       <Features colors={colors} />
