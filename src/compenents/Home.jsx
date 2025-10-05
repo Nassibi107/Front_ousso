@@ -6,7 +6,7 @@ import AlertBar from './AlertBar/AlertBar';
 const Home = ( { colors }) => {
   return (
     <div className="min-h-screen bg-white">
-      <AlertBar />
+      {/* <AlertBar /> */}
       <Header colors={colors} />
       <Hero colors={colors} />
       <Features colors={colors} />
