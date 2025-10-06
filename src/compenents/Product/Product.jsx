@@ -15,16 +15,18 @@ const GRAPHQL_ENDPOINT = `${SERVER_URL}/graphql`;
 const GET_PRODUCTS_QUERY = `
   query GetProducts {
     get_Products {
-      product_id
-      name
-      price
-      Orginal_price
-      features
-      image
-      bgColor
-      description
-      createdAt
-      updatedAt
+        product_id
+    name
+    price
+    Orginal_price
+    features
+    image
+    bgColor
+    popular
+    description
+    createdAt
+    updatedAt
+    hidden
     }
   }
 `;
@@ -583,7 +585,7 @@ const Product = ({ colors = {} }) => {
           throw new Error(result.errors[0].message);
         }
 
-        const productsData = result.data.get_Products.map(product => ({
+        const productsData = result.data.get_Products.filter(product => (product.hidden)).map(product => ({
           id: product.product_id,
           name: product.name,
           price: product.price,
@@ -593,7 +595,7 @@ const Product = ({ colors = {} }) => {
           image: product.image || [],
           bgColor: product.bgColor || 'from-gray-50 to-gray-100',
           description: product.description || '',
-          popular: product.Orginal_price && product.price < product.Orginal_price
+          popular: product.popular || false
         }));
 
         setProducts(productsData);

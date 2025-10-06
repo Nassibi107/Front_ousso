@@ -15,8 +15,7 @@ export const CREATE_ORDER = gql`
    `;
 
   export const GET_ORDERS = gql`
-  query Query {
-  get_Products {
+  query   get_Products {
     product_id
     name
     price
@@ -28,6 +27,22 @@ export const CREATE_ORDER = gql`
     description
     createdAt
     updatedAt
+    hidden
+  }
+ `;
+
+
+export const GET_REVIEWS = gql`
+query GetReviews {
+  getReviews {
+    review_id
+    name
+    rating
+    text
+    Product_img
+    conversation_img
+    createdAt
+    updatedAt
   }
 }
-    `;
+`;

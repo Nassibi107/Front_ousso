@@ -90,7 +90,6 @@ function Testimonials({ colors = {} }) {
 
   return (
     <section id="testimonials" className="py-20 relative overflow-hidden" style={{backgroundColor: finalColors.light}}>
-      {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 left-10 w-40 h-40 rounded-full opacity-20 animate-pulse" style={{backgroundColor: finalColors.accent}}></div>
         <div className="absolute top-32 right-16 w-24 h-24 rounded-full opacity-30 animate-bounce" style={{backgroundColor: finalColors.primary}}></div>

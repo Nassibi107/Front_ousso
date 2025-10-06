@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Star, MessageCircle, Phone, Check, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { GET_REVIEWS
 
+ } from '../../../graphQL/queriers';
+import { useQuery } from '@apollo/client/react';
 const colors = {
   primary: '#025984',
   secondary: '#0a8899',
@@ -11,108 +14,36 @@ const colors = {
 };
 
 const TestimonialsPage = () => {
+  const { loading, error, data } = useQuery(GET_REVIEWS);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedConversation, setSelectedConversation] = useState(null);
   const testimonialsPerPage = 6;
 
-  // Sample testimonials data with Moroccan names - Deodorant specific
-  const testimonials = [
-    {
-      id: 1,
-      name: "Fatima El Amrani",
-      city: "Casablanca",
-      rating: 5,
-      text: "Ce déodorant est une révélation ! Fini les traces blanches sur mes vêtements noirs. Il tient toute la journée même avec la chaleur de Casablanca. Je ne peux plus m'en passer !",
-      productImage: "https://images.unsplash.com/photo-1556228724-c4b7d7c8e9de?w=300&h=200&fit=crop",
-      conversationImage: "https://images.unsplash.com/photo-1611746872915-64382b5c76da?w=400&h=300&fit=crop",
-      date: "15 Août 2024"
-    },
-    {
-      id: 2,
-      name: "Youssef Benali",
-      city: "Rabat",
-      rating: 5,
-      text: "Enfin un déodorant qui tient ses promesses ! Protection 48h réelle, même après le sport. L'odeur est fraîche et masculine. Mon épouse l'adore aussi !",
-      productImage: "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=300&h=200&fit=crop",
-      conversationImage: "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=400&h=300&fit=crop",
-      date: "28 Juillet 2024"
-    },
-    {
-      id: 3,
-      name: "Aicha Lahlou",
-      city: "Marrakech",
-      rating: 2,
-      text: "Parfait pour le climat chaud de Marrakech ! Ce déodorant ne laisse aucune trace et reste efficace toute la journée. Ma peau sensible le tolère parfaitement.",
-      productImage: "https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=300&h=200&fit=crop",
-      conversationImage: "https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=400&h=300&fit=crop",
-      date: "10 Septembre 2024"
-    },
-    {
-      id: 4,
-      name: "Omar Chakir",
-      city: "Fès",
-      rating: 5,
-      text: "Excellent déodorant ! Plus de problème de transpiration excessive. Le parfum est subtil et élégant. Rapport qualité-prix imbattable comparé aux marques internationales.",
-      productImage: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?w=300&h=200&fit=crop",
-      conversationImage: "https://images.unsplash.com/photo-1512428813834-c702c7702b78?w=400&h=300&fit=crop",
-      date: "3 Août 2024"
-    },
-    {
-      id: 5,
-      name: "Khadija Tazi",
-      city: "Tanger",
-      rating: 5,
-      text: "Ce déodorant a changé ma vie ! Fini le stress des auréoles sur mes chemisiers. Protection longue durée garantie, même lors de mes réunions importantes.",
-      productImage: "https://images.unsplash.com/photo-1567721913486-6585f069b332?w=300&h=200&fit=crop",
-      conversationImage: "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=400&h=300&fit=crop",
-      date: "22 Septembre 2024"
-    },
-    {
-      id: 6,
-      name: "Rachid Bennani",
-      city: "Agadir",
-      rating: 5,
-      text: "Formule révolutionnaire ! Ce déodorant anti-transpirant me donne une confiance totale. Idéal pour les journées chaudes d'Agadir. Je le recommande à tous mes collègues !",
-      productImage: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=200&fit=crop",
-      conversationImage: "https://images.unsplash.com/photo-1553484771-371a605b060b?w=400&h=300&fit=crop",
-      date: "5 Septembre 2024"
-    },
-    {
-      id: 7,
-      name: "Salma Idrissi",
-      city: "Meknès",
-      rating: 5,
-      text: "Déodorant de qualité premium ! Texture agréable, séchage rapide et efficacité prouvée. Plus jamais de gêne ou d'inconfort. Un vrai plaisir à utiliser au quotidien.",
-      productImage: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=300&h=200&fit=crop",
-      conversationImage: "https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=400&h=300&fit=crop",
-      date: "18 Août 2024"
-    },
-    {
-      id: 8,
-      name: "Hassan Alaoui",
-      city: "Oujda",
-      rating: 5,
-      text: "Enfin un déodorant qui respecte ma peau ! Formule sans aluminium mais super efficace. L'équipe m'a bien conseillé sur WhatsApp pour choisir le bon parfum.",
-      productImage: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=200&fit=crop",
-      conversationImage: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=300&fit=crop",
-      date: "12 Juillet 2024"
-    },
-    {
-      id: 9,
-      name: "Naima Berrada",
-      city: "Tétouan",
-      rating: 5,
-      text: "Protection maximale assurée ! Ce déodorant tient toutes ses promesses. Parfum délicat et féminin, application facile. Mes vêtements restent impeccables toute la journée !",
-      productImage: "https://images.unsplash.com/photo-1567721913486-6585f069b332?w=300&h=200&fit=crop",
-      conversationImage: "https://images.unsplash.com/photo-1588421357574-87938a86fa28?w=400&h=300&fit=crop",
-      date: "1er Septembre 2024"
-    }
-  ];
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error fetching testimonials</p>;
+
+  const testimonials = data.getReviews;
+
+  const formattedTestimonials = testimonials.map(testimonial => ({
+    id: testimonial.review_id,
+    name: testimonial.name,
+    city: testimonial.location,
+    rating: testimonial.rating,
+    text: testimonial.text,
+    productImage: testimonial.Product_img,
+    conversationImage: testimonial.conversation_img,
+    date: testimonial.createdAt
+  }));
+
+ 
+
+
 
   // Pagination logic
-  const totalPages = Math.ceil(testimonials.length / testimonialsPerPage);
+  const totalPages = Math.ceil(formattedTestimonials.length / testimonialsPerPage);
   const startIndex = (currentPage - 1) * testimonialsPerPage;
-  const currentTestimonials = testimonials.slice(startIndex, startIndex + testimonialsPerPage);
+  const currentTestimonials = formattedTestimonials.slice(startIndex, startIndex + testimonialsPerPage);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -184,7 +115,7 @@ const TestimonialsPage = () => {
                 {/* Deodorant Product Image */}
                 <div className="h-48 overflow-hidden">
                   <img
-                    src={testimonial.productImage}
+                    src={"http://localhost:4000"+testimonial.productImage}
                     alt="Déodorant"
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                   />
@@ -213,7 +144,7 @@ const TestimonialsPage = () => {
                       <span className="text-sm font-medium">Conversation WhatsApp</span>
                     </div>
                     <img
-                      src={testimonial.conversationImage}
+                      src={"http://localhost:4000"+testimonial.conversationImage}
                       alt="Conversation"
                       className="w-full h-20 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity"
                       onClick={() => setSelectedConversation(testimonial)}
