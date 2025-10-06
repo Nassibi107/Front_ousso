@@ -483,27 +483,14 @@ const CheckoutModal = ({ onClose, colors, onBack }) => {
 
                 <div>
                   <label className="block text-sm font-medium mb-2">Ville *</label>
-                  <select
+                 <textarea
                     name="city"
                     value={formData.city}
                     onChange={handleInputChange}
+                    rows="3"
                     className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-teal-500 outline-none"
-                  >
-                    <option value="">Sélectionnez votre ville</option>
-                    <option value="Casablanca">Casablanca</option>
-                    <option value="Rabat">Rabat</option>
-                    <option value="Marrakech">Marrakech</option>
-                    <option value="Fès">Fès</option>
-                    <option value="Tanger">Tanger</option>
-                    <option value="Agadir">Agadir</option>
-                    <option value="Meknès">Meknès</option>
-                    <option value="Oujda">Oujda</option>
-                    <option value="Kenitra">Kenitra</option>
-                    <option value="Tétouan">Tétouan</option>
-                    <option value="Autre">Autre ville</option>
-                  </select>
+                  />
                 </div>
-
                 <div>
                   <label className="block text-sm font-medium mb-2">Adresse Complète *</label>
                   <textarea
