@@ -29,7 +29,6 @@ function Header({ colors }) {
     { href: '#features', label: 'Features', type: 'anchor' },
     { href: '#products', label: 'Products', type: 'anchor' },
     { href: '#testimonials', label: 'Avis', type: 'anchor' },
-    { to: '/contact', label: 'Contact', type: 'link' },
     { href: '#faq', label: 'FAQ', type: 'anchor' },
     { to: '/testimonials', label: 'Reviews', type: 'link' }
   ];

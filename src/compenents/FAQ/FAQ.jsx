@@ -207,9 +207,7 @@ function FAQ({ colors = {} }) {
                 💬 Chat en Direct
               </button>
             </a>
-                <Link to="/contact" className="px-8 py-3 rounded-full font-bold transition-all duration-300 hover:scale-105 hover:shadow-lg border-2 hover:bg-white" style={{color: finalColors.primary, borderColor: finalColors.primary}}>
-              📧 Nous Contacter
-              </Link>
+          
             </div>
           </div>
         </div>
