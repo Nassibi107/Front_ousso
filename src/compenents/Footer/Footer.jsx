@@ -125,7 +125,7 @@ function Footer({colors}) {
                 {[
                   { text: "FAQ", link: "#faq", icon: null },
                   { text: "Informations sur le produit", link: "#benefits", icon: null },
-                  { text: "Contactez-nous", link: "http://localhost:5173/contact", icon: Mail }
+                 
                 ].map((item, i) => (
                   <li key={i}>
                     <a 
@@ -159,7 +159,7 @@ function Footer({colors}) {
               <div className="space-y-4 mb-8">
                 {[
                   { text: "Instagram", icon: Instagram, color: colors.accent , link : "https://www.instagram.com/ousso.body?utm_source=ig_web_button_share_sheet&igsh=MXhtcGFhNHg2Y21rMw== " },
-                  { text: "WhatsApp", icon: MessageCircle, color: colors.success , link :"https://wa.me/+212600586528" }
+                  { text: "WhatsApp", icon: MessageCircle, color: colors.success , link :"https://wa.me/+212646259562" }
                 ].map((social, i) => (
                   <a 
                     key={i}
@@ -177,15 +177,15 @@ function Footer({colors}) {
               <div className="space-y-3 opacity-80">
                 <div className="flex items-center gap-3">
                   <Phone className="w-4 h-4" style={{ color: colors.accent }} />
-                  <span className="text-sm">+212 XXX XXX XXX</span>
+                  <span className="text-sm">+212646259562</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Mail className="w-4 h-4" style={{ color: colors.accent }} />
-                  <span className="text-sm">hello@oussbody.com</span>
+                  <span className="text-sm">contact@oussobody.store</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <MapPin className="w-4 h-4" style={{ color: colors.accent }} />
-                  <span className="text-sm">Casablanca, Morocco</span>
+                  <span className="text-sm">Casablanca</span>
                 </div>
               </div>
             </div>

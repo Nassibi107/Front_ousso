@@ -61,18 +61,21 @@ export default function Hero({ colors }) {
             variants={imageAnim}
           >
             <div
-              className="w-50 h-50 mx-auto rounded-full flex items-center justify-center transform hover:scale-105 transition-transform cursor-pointer"
+              className="w-50 h-50 mx-auto rounded-full 
+              flex items-center justify-center transform hover:scale-105 transition-transform cursor-pointer"
               style={{ backgroundColor: colors.light }}
             >
               <img
                 src={FLAG11}
                 alt="Product"
-                className="object-contain transition-all duration-500 ease-in-out w-200 h-200"
+                className="object-contain transition-all 
+                duration-500 ease-in-out w-200 h-200"
               />
             </div>
 
             <div
-              className="absolute -top-4 -right-4 w-24 h-24 rounded-full animate-pulse"
+              className="absolute -top-4 -right-4 w-24 
+              h-24 rounded-full animate-pulse"
               style={{ backgroundColor: colors.success }}
             ></div>
             <div
@@ -80,10 +83,8 @@ export default function Hero({ colors }) {
               style={{ backgroundColor: colors.accent }}
             ></div>
           </motion.div>
-
         </div>
       </div>
-
       {/* Chevron */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
         <ChevronDown size={32} className="text-white opacity-60" />
@@ -91,3 +92,4 @@ export default function Hero({ colors }) {
     </section>
   );
 }
+

@@ -246,7 +246,7 @@ const TestimonialsPage = () => {
             </div>
             <div className="p-4">
               <img
-                src={selectedConversation.conversationImage}
+                src={"http://localhost:4000" + selectedConversation.conversationImage}
                 alt="Conversation complète"
                 className="w-full max-h-96 object-contain rounded-lg"
               />
@@ -286,7 +286,7 @@ const TestimonialsPage = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-            href="https://wa.me/+212600586528"
+            href="https://wa.me/+212646259562"
               className="px-8 py-3 bg-white rounded-lg font-semibold transition-transform duration-200 hover:scale-105"
               style={{ color: colors.accent }}
             >

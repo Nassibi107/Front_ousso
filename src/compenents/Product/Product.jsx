@@ -339,7 +339,7 @@ const CheckoutModal = ({ onClose, colors, onBack }) => {
   const [createOrder] = useMutation(CREATE_ORDER);
   const [formData, setFormData] = useState({
     address: "",
-    city: "khouribga",
+    city: "",
     first_name: "",
     last_name: "",
     phone: ""

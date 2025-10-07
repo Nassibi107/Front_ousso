@@ -199,7 +199,7 @@ function FAQ({ colors = {} }) {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-              href="https://wa.me/+212600586528"
+              href="https://wa.me/+212646259562"
               target="_blank"
               rel="noopener noreferrer"
             >
