@@ -168,7 +168,7 @@ const ProductDetailModal = ({ product, isOpen, onClose, colors }) => {
               <div className="flex items-center gap-3">
                 {product.Original_price && (
                   <span className="text-xl text-gray-500 line-through">
-                    {product.Original_price} DH
+                    {product.Original_price} 
                   </span>
                 )}
                 <span className="text-4xl font-bold text-teal-600">
@@ -714,7 +714,7 @@ const Product = ({ colors = {} }) => {
                         <img 
                           src={`${SERVER_URL}${product.image[0]}`}
                           alt={product.name}
-                          className="w-full h-full rounded-2xl object-cover shadow-xl group-hover:shadow-2xl transition-all duration-500 border-4 border-white"
+                          className="w-full h-fuDHll rounded-2xl object-cover shadow-xl group-hover:shadow-2xl transition-all duration-500 border-4 border-white"
                         />
                         <div className="absolute -top-2 -right-2 w-10 h-10 bg-gradient-to-r from-green-400 to-teal-500 rounded-full flex items-center justify-center animate-bounce shadow-lg">
                           <Leaf size={20} className="text-white" />
