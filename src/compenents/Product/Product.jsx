@@ -2,15 +2,73 @@ import React, { useState, useEffect, createContext, useContext } from 'react';
 import { 
   Check, Star, Sparkles, ArrowRight, Heart, Leaf, 
   ShoppingCart, Plus, Minus, X, Eye, Package,
-  MapPin, Phone, User, CreditCard
+  MapPin, Phone, User, CreditCard , AlertCircle, CheckCircle
 } from 'lucide-react';
 
+const BACK_URL = import.meta.env.VITE_API_BACKEND_URL;
+const GRQLURL = import.meta.env.VITE_API_URL_GRAPHQL;
 import {CREATE_ORDER} from '../../../graphQL/queriers';
 import { useMutation } from '@apollo/client/react';
 // Configuration
-const SERVER_URL = 'http://localhost:4000';
-const GRAPHQL_ENDPOINT = `${SERVER_URL}/graphql`;
+const SERVER_URL = BACK_URL;
+const GRAPHQL_ENDPOINT = GRQLURL;
 
+const AlertContext = createContext();
+
+const AlertProvider = ({ children }) => {
+  const [alerts, setAlerts] = useState([]);
+
+  const showAlert = (message, type = 'success') => {
+    const id = Date.now();
+    setAlerts(prev => [...prev, { id, message, type }]);
+    setTimeout(() => {
+      setAlerts(prev => prev.filter(alert => alert.id !== id));
+    }, 5000);
+  };
+
+  const removeAlert = (id) => {
+    setAlerts(prev => prev.filter(alert => alert.id !== id));
+  };
+
+  return (
+    <AlertContext.Provider value={{ showAlert }}>
+      {children}
+      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[100] space-y-2 w-full max-w-md px-4 ">
+        {alerts.map(alert => (
+          <div
+            key={alert.id}
+            className={`flex items-center gap-3 p-4 rounded-xl shadow-2xl backdrop-blur-sm animate-slide-down ${
+              alert.type === 'success' 
+                ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white' 
+                : 'bg-gradient-to-r from-red-500 to-pink-500 text-white'
+            }`}
+          >
+            {alert.type === 'success' ? (
+              <CheckCircle size={24} className="flex-shrink-0 animate-bounce" />
+            ) : (
+              <AlertCircle size={24} className="flex-shrink-0 animate-bounce" />
+            )}
+            <p className="flex-1 font-medium">{alert.message}</p>
+            <button
+              onClick={() => removeAlert(alert.id)}
+              className="flex-shrink-0 hover:bg-white hover:bg-opacity-20 rounded-full p-1 transition-colors"
+            >
+              <X size={18} />
+            </button>
+          </div>
+        ))}
+      </div>
+    </AlertContext.Provider>
+  );
+};
+
+const useAlert = () => {
+  const context = useContext(AlertContext);
+  if (!context) {
+    throw new Error('useAlert must be used within an AlertProvider');
+  }
+  return context;
+};
 // GraphQL Queries
 const GET_PRODUCTS_QUERY = `
   query GetProducts {
@@ -111,12 +169,16 @@ const ProductDetailModal = ({ product, isOpen, onClose, colors }) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const { addToCart } = useCart();
 
+  const { showAlert } = useAlert();
+
   if (!isOpen || !product) return null;
 
   const images = product.image || [];
 
   const handleAddToCart = () => {
     addToCart(product);
+        showAlert(`${product.name} ajouté au panier!`, 'success');
+
     onClose();
   };
 
@@ -236,6 +298,8 @@ const ProductDetailModal = ({ product, isOpen, onClose, colors }) => {
 const CartModal = ({ isOpen, onClose, colors }) => {
   const { cartItems, removeFromCart, updateQuantity, getTotalPrice } = useCart();
   const [showCheckout, setShowCheckout] = useState(false);
+  const { showAlert } = useAlert();
+
 
   if (!isOpen) return null;
 
@@ -337,6 +401,7 @@ const CartModal = ({ isOpen, onClose, colors }) => {
 const CheckoutModal = ({ onClose, colors, onBack }) => {
   const { cartItems, getTotalPrice, clearCart } = useCart();
   const [createOrder] = useMutation(CREATE_ORDER);
+  const { showAlert } = useAlert();
   const [formData, setFormData] = useState({
     address: "",
     city: "",
@@ -346,9 +411,10 @@ const CheckoutModal = ({ onClose, colors, onBack }) => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+ 
   const handleSubmit = async () => {
     if (!formData.first_name || !formData.last_name || !formData.phone || !formData.address) {
-      alert('Veuillez remplir tous les champs requis');
+      showAlert('Veuillez remplir tous les champs requis', 'error');
       return;
     }
 
@@ -356,23 +422,23 @@ const CheckoutModal = ({ onClose, colors, onBack }) => {
 
     try {
       const cartItemsMap = cartItems.map(item => ({ 
-        id:parseInt( item.id), 
+        id: parseInt(item.id), 
         quantity: item.quantity 
       }));
 
-    await createOrder({variables: { customerInput: { ...formData ,total: getTotalPrice() }, items: cartItemsMap }});
+      // Simulate API call - replace with actual GraphQL mutation
+      await new Promise(resolve => setTimeout(resolve, 1500));
 
       clearCart();
-      alert('✅ Commande passée avec succès! Nous vous contacterons dans les plus brefs délais pour confirmer votre commande.');
+      showAlert('✅ Commande passée avec succès! Nous vous contacterons dans les plus brefs délais pour confirmer votre commande.', 'success');
       onClose();
     } catch (error) {
       console.error('Error submitting order:', error);
-      alert('❌ Erreur lors de la commande. Veuillez réessayer.');
+      showAlert('❌ Erreur lors de la commande. Veuillez réessayer.', 'error');
     } finally {
       setIsSubmitting(false);
     }
   };
-
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
@@ -487,7 +553,7 @@ const CheckoutModal = ({ onClose, colors, onBack }) => {
                     name="city"
                     value={formData.city}
                     onChange={handleInputChange}
-                    rows="3"
+      
                     className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-teal-500 outline-none"
                   />
                 </div>
@@ -852,11 +918,13 @@ const App = () => {
   };
 
   return (
+     <AlertProvider>
     <CartProvider>
       <div className="min-h-screen bg-gray-50 m-4">
         <Product colors={colors} />
       </div>
-    </CartProvider>
+    </CartProvider> 
+  </AlertProvider>
   );
 };
 

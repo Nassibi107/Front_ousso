@@ -5,6 +5,9 @@ import { GET_REVIEWS
 
  } from '../../../graphQL/queriers';
 import { useQuery } from '@apollo/client/react';
+const GRQLURL = import.meta.env.VITE_API_URL_GRAPHQL;
+
+const BACK_URL = import.meta.env.VITE_API_BACKEND_URL;
 const colors = {
   primary: '#025984',
   secondary: '#0a8899',
@@ -115,7 +118,7 @@ const TestimonialsPage = () => {
                 {/* Deodorant Product Image */}
                 <div className="h-48 overflow-hidden">
                   <img
-                    src={"http://localhost:4000"+testimonial.productImage}
+                    src={`${BACK_URL}${testimonial.productImage}`}
                     alt="Déodorant"
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                   />
@@ -144,7 +147,7 @@ const TestimonialsPage = () => {
                       <span className="text-sm font-medium">Conversation WhatsApp</span>
                     </div>
                     <img
-                      src={"http://localhost:4000"+testimonial.conversationImage}
+                      src={`${BACK_URL}${testimonial.conversationImage}`}
                       alt="Conversation"
                       className="w-full h-20 object-cover rounded cursor-pointer hover:opacity-80 transition-opacity"
                       onClick={() => setSelectedConversation(testimonial)}
@@ -246,7 +249,7 @@ const TestimonialsPage = () => {
             </div>
             <div className="p-4">
               <img
-                src={"http://localhost:4000" + selectedConversation.conversationImage}
+                src={`${BACK_URL}${selectedConversation.conversationImage}`}
                 alt="Conversation complète"
                 className="w-full max-h-96 object-contain rounded-lg"
               />

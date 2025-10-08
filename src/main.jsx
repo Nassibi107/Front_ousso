@@ -19,9 +19,11 @@ import {
 import { ApolloProvider  } from '@apollo/client/react';
 import { setContext } from '@apollo/client/link/context';
 
+const BACK_URL = import.meta.env.VITE_API_BACKEND_URL;
+const GRQLURL = import.meta.env.VITE_API_URL_GRAPHQL;
 
 const wsLink = new GraphQLWsLink(createClient({
-  url: 'ws://localhost:4000/graphql',
+  url: `${GRQLURL.replace('http', 'ws')}`,
   connectionParams: {
     authToken: localStorage.getItem('token'),
   },
@@ -29,7 +31,7 @@ const wsLink = new GraphQLWsLink(createClient({
 // Create a HttpLink explicitly
 
 const link = new HttpLink({
-  uri: 'http://localhost:4000/graphQl',
+  uri: GRQLURL,
   credentials:'same-origin'
 });
 
