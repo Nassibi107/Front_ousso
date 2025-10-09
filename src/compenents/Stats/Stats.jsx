@@ -9,7 +9,7 @@ import { ChevronDown, Star, Shield, Leaf, Clock,
             <div className="container mx-auto px-6">
               <div className="grid md:grid-cols-4 gap-8 text-center">
                 {[
-                  { number: '50K+', label: 'Happy Customers' },
+                  { number: '1K+', label: 'Happy Customers' },
                   { number: '48hr', label: 'Protection' },
                   { number: '100%', label: 'Natural' },
                   { number: '4.9★', label: 'Rating' }

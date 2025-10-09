@@ -23,8 +23,23 @@ const TestimonialsPage = () => {
   const [selectedConversation, setSelectedConversation] = useState(null);
   const testimonialsPerPage = 6;
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error fetching testimonials</p>;
+  if (loading) return (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+      <p className="text-gray-600 text-lg">Loading testimonials...</p>
+    </div>
+  </div>
+);
+
+if (error) return (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md">
+      <p className="text-red-600 font-semibold">Error loading testimonials</p>
+      <p className="text-red-500 text-sm mt-2">Please try again later</p>
+    </div>
+  </div>
+);
 
   const testimonials = data.getReviews;
 
@@ -91,7 +106,7 @@ const TestimonialsPage = () => {
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             <div className="text-white">
-              <div className="text-3xl font-bold mb-2">500+</div>
+              <div className="text-3xl font-bold mb-2">50+</div>
               <div className="text-lg opacity-90">Clients Satisfaits</div>
             </div>
             <div className="text-white">

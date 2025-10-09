@@ -82,7 +82,7 @@ function Testimonials({ colors = {} }) {
   ];
 
   const stats = [
-    { number: '15,000+', label: 'Clients Satisfaits', icon: Users },
+    { number: '1000+', label: 'Clients Satisfaits', icon: Users },
     { number: '4.9/5', label: 'Note Moyenne', icon: Star },
     { number: '98%', label: 'Recommandent', icon: Heart },
     { number: '100%', label: 'Naturel', icon: Sparkles }
@@ -328,7 +328,7 @@ function Testimonials({ colors = {} }) {
                 <div className="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-r from-purple-400 to-pink-500 flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
                   <Users className="text-white animate-pulse" size={24} />
                 </div>
-                <p className="font-bold text-xl" style={{color: finalColors.primary}}>15K+</p>
+                <p className="font-bold text-xl" style={{color: finalColors.primary}}>1.5k+</p>
                 <p className="text-sm opacity-80" style={{color: finalColors.secondary}}>Clients Fidèles</p>
               </div>
               

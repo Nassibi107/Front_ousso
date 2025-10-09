@@ -183,10 +183,7 @@ function Footer({colors}) {
                   <Mail className="w-4 h-4" style={{ color: colors.accent }} />
                   <span className="text-sm">contact@oussobody.store</span>
                 </div>
-                <div className="flex items-center gap-3">
-                  <MapPin className="w-4 h-4" style={{ color: colors.accent }} />
-                  <span className="text-sm">Casablanca</span>
-                </div>
+               
               </div>
             </div>
           </div>
